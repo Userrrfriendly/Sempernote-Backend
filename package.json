@@ -1,0 +1,19 @@
+{
+  "name": "sempernote-fullstack",
+  "version": "0.0.1",
+  "description": "An dead simple version of evernote",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mern",
+    "mongoDB",
+    "express.js",
+    "react.js",
+    "node.js",
+    "materialize"
+  ],
+  "author": "Veniamin Tsigourof",
+  "license": "ISC"
+}
