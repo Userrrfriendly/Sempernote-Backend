@@ -1,0 +1,7 @@
+node_modules
+/client/node_modules
+/client/.git
+/internal
+nodemon.json
+.vscode
+.DS_Store
