@@ -1,6 +1,6 @@
-const Event = require('../../models/event');
-const User = require('../../models/user');
-const { dateToString } = require('../../helpers/date');
+const Event = require("../../models/event");
+const User = require("../../models/user");
+const { dateToString } = require("../../helpers/date");
 
 const events = async eventIds => {
   try {
@@ -28,7 +28,8 @@ const user = async userId => {
     return {
       ...user._doc,
       _id: user.id,
-      createdEvents: events.bind(this, user._doc.createdEvents)
+      createdEvents: events.bind(this, user._doc.createdEvents),
+      createdNotes: events.bind(this, user._doc.createdNotes)
     };
   } catch (err) {
     throw err;
@@ -41,6 +42,16 @@ const transformEvent = event => {
     _id: event.id,
     date: dateToString(event._doc.date),
     creator: user.bind(this, event.creator)
+  };
+};
+
+const transformNote = note => {
+  return {
+    ...note._doc,
+    _id: note.id,
+    createdAt: dateToString(note._doc.createdAt),
+    updatedAt: dateToString(note._doc.updatedAt),
+    creator: user.bind(this, note.creator)
   };
 };
 
@@ -57,6 +68,7 @@ const transformBooking = booking => {
 
 exports.transformEvent = transformEvent;
 exports.transformBooking = transformBooking;
+exports.transformNote = transformNote;
 
 // exports.user = user;
 // exports.events = events;

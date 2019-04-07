@@ -2,7 +2,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
 
 ### `npm start`
 
@@ -48,3 +47,19 @@ It will allow us to defy and setup a GraphQL schema. It will parse and convert (
 
 ### hosting options:
 first, make a repo in github. second https://codeanywhere.com/ you can create a free account, is a vps, you can installe mern stack with one click in ubuntu. and last run git clone (your repo) and then run npm install for your node packages. codeanywhere is a great free option, but if you cn pay 5 dollars go for a digital ocean vps, (codeanywhere have some bugs in my opinion), and in a digital ocean vps you can host many pages as you want, and with subdomains, you can use nginx as a reverse proxy etc. you have more options in digital ocean and is well documentated﻿
+
+-When hosting should I (in mongoDBAtlas) whitelist just the IP of the server where the app will be hosted or allow all IPS (current option)?
+-inside is-auth  middleware && resolvers/auth.js i need to move the supersecretpassword into an evironmental variable
+-Could I Should I remove the body-parser from app.js?
+-when returning items from the database I think I can remove the _id transformation (...id: _id.stringify() or smth) cause GraphQL seems to handle them without any caveats now
+
+
+###GRAPHQL queries:
+
+`mutation {
+  createUser(userInput:{email:"test@tester.com",password:"tester"}) {
+    email
+    password
+  }
+}`
+
