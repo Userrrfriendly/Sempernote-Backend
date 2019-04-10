@@ -12,14 +12,6 @@ const noteSchema = new Schema(
       type: String,
       required: true
     },
-    // createdAt: {
-    //   type: Date,
-    //   required: true
-    // },
-    // updatedAt: {
-    //   type: Date,
-    //   required: true
-    // },
     creator: {
       type: Schema.Types.ObjectId,
       ref: "User"

@@ -52,7 +52,8 @@ first, make a repo in github. second https://codeanywhere.com/ you can create a 
 -inside is-auth  middleware && resolvers/auth.js i need to move the supersecretpassword into an evironmental variable
 -Could I Should I remove the body-parser from app.js?
 -when returning items from the database I think I can remove the _id transformation (...id: _id.stringify() or smth) cause GraphQL seems to handle them without any caveats now
-
+-in production need to add is-auth to every query && mutation
+*When I delete a note the User's field 'createdNotes' doesn't automatically delete the ids
 
 ###GRAPHQL queries:
 

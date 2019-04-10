@@ -1,6 +1,6 @@
 const Note = require("../../models/note");
 const User = require("../../models/user");
-
+const Trash = require("../../models/trash");
 const { transformNote } = require("./merge");
 
 module.exports = {
@@ -15,25 +15,22 @@ module.exports = {
     }
   },
   createNote: async (args, req) => {
-    // if (!req.isAuth) {
-    //   throw new Error("Unauthenticated!");
-    // }
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
 
     const note = new Note({
       title: args.noteInput.title,
       body: args.noteInput.body,
-      createdAt: new Date(args.noteInput.createdAt),
-      updatedAt: new Date(args.noteInput.updatedAt),
       creator: req.userId
     });
+
     let createdNote;
 
     try {
       const result = await note.save();
       createdNote = transformNote(result);
       const creator = await User.findById(req.userId);
-      // console.log("kreator: " + creator);
-      // console.log("note: " + note);
 
       if (!creator) {
         throw new Error("User not found.");
@@ -43,6 +40,39 @@ module.exports = {
       return createdNote;
     } catch (err) {
       console.log(err);
+      throw err;
+    }
+  },
+
+  movetoTrash: async (args, req) => {
+    //Do I need to add some logic if someone tries to delete a note that doesn't exist?
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const transformedNote = transformNote(note);
+      await Trash.insertOne(transformedNote);
+      await Note.deleteOne({ _id: args.noteID });
+      return transformedNote;
+    } catch (err) {
+      console.log("|note.js - deleteNote|" + err);
+      throw err;
+    }
+  },
+
+  deleteNote: async (args, req) => {
+    //Do I need to add some logic if someone tries to delete a note that doesn't exist?
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const transformedNote = transformNote(note);
+      await Note.deleteOne({ _id: args.noteID });
+      return transformedNote;
+    } catch (err) {
+      console.log("|note.js - deleteNote|" + err);
       throw err;
     }
   }

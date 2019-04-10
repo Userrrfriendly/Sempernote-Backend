@@ -38,6 +38,15 @@ type Note {
   creator: User!
 }
 
+type Trash {
+  _id: ID!
+  title: String!
+  body: String!
+  createdAt: String!
+  updatedAt: String!
+  creator: User!
+}
+
 type Notebook {
   _id: ID!
   title: String!
@@ -90,6 +99,8 @@ type RootQuery {
 
 type RootMutation {
     createNote(noteInput: NoteInput): Note
+    deleteNote(noteID: ID!): Note!
+    movetoTrash(noteID: ID!): Note!
     createEvent(eventInput: EventInput): Event
     createUser(userInput: UserInput): User
     bookEvent(eventId: ID!): Booking!
