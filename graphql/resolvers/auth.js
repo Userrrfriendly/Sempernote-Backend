@@ -14,7 +14,8 @@ module.exports = {
 
       const user = new User({
         email: args.userInput.email,
-        password: hashedPassword
+        password: hashedPassword,
+        username: args.userInput.username
       });
 
       const result = await user.save();
@@ -42,4 +43,11 @@ module.exports = {
     );
     return { userId: user.id, token: token, tokenExpiration: 1 };
   }
+  // from scema RootQuery  user(userId: ID!): User!
+
+  // user: async args => {
+  //   console.log(args.userId);
+  //   const user = await User.findById(args.userId);
+  //   return { _id: user.id, email: user.email, notes: user.notes };
+  // }
 };

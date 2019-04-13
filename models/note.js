@@ -15,27 +15,13 @@ const noteSchema = new Schema(
     creator: {
       type: Schema.Types.ObjectId,
       ref: "User"
+    },
+    isTrash: {
+      type: Boolean,
+      required: true
     }
-    // notebook: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Notebook"
-    // },
-    // tags: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Tag"
-    // },
-    // favourites: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Favourite"
-    // }
   },
   { timestamps: true }
 );
-
-/*
-  notebook: Notebook
-  tags: Tag
-  favourites: Favorite
-*/
 
 module.exports = mongoose.model("Note", noteSchema);

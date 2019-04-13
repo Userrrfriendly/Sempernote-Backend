@@ -3,10 +3,10 @@ import React from "react";
 // import "./nav.css";
 import Logo from "../svg-icons/platypus-logo";
 import Drawer from "../drawer/drawer";
+import M from "materialize-css";
 class Nav extends React.Component {
   componentDidMount() {
-    // var elems = document.querySelectorAll(".sidenav");
-    // var instances = M.Sidenav.init(elems);
+    M.AutoInit();
   }
   render() {
     return (

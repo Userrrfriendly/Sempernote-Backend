@@ -1,43 +1,104 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import "materialize-css/dist/css/materialize.min.css";
 import M from "materialize-css";
 
 import "./App.css";
 import Nav from "./components/header/nav";
 import Main from "./components/main/main";
-// import Drawer from "./components/drawer/drawer";
 import ErrorRoute from "./components/ErrorRoute/errorRoute";
+import AuthScreen from "./components/authScreen/authscreen";
+import Context from "./context/context";
 
 class App extends Component {
   state = {
-    drawerVisible: false
-  };
-
-  toggleDrawer = () => {
-    this.setState({ drawerVisible: !this.state.drawerVisible });
-  };
-
-  closeDrawer = () => {
-    this.setState({ drawerVisible: false });
+    token: false,
+    userId: null,
+    globalState: null
   };
 
   componentDidMount() {
     M.AutoInit();
   }
 
+  login = (token, userId, tokenExpiration) => {
+    this.setState({ token: token, userId: userId });
+  };
+
+  logout = () => {
+    this.setState({ token: null, userId: null });
+  };
+
+  fetchGlobalData = () => {
+    //It actually makes more sense to land on a user gather all his data (facorites tags notebooks etc) and then extrapolate to notes
+    let requestBody = {
+      query: `
+        query {
+          userNotes(userId: "${this.state.userId}") {
+            title
+            _id
+            body
+            createdAt
+            updatedAt
+          }
+        }
+      `
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        this.setState({
+          globalState: resData.data
+        });
+        console.log(this.state.globalState);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   render() {
     return (
       <div className="App">
-        <Nav toggleDrawer={this.toggleDrawer} />
-        {/* <Drawer
-          drawerVisible={this.state.drawerVisible}
-          closeDrawer={this.closeDrawer}
-        /> */}
-        <Switch>
-          <Route exact path="/" component={Main} />
-          <Route component={ErrorRoute} />
-        </Switch>
+        <Context.Provider
+          value={{
+            token: this.state.token,
+            userId: this.state.userId,
+            login: this.login,
+            logout: this.logout,
+            fetchGlobalData: this.fetchGlobalData,
+            globalState: this.state.globalState
+          }}
+        >
+          <Switch>
+            {!this.state.token && <Redirect exact from="/" to="/auth/" />}
+            {this.state.token && <Redirect exact from="/auth/" to="/" />}
+            <Route path="/auth" component={AuthScreen} />
+            <Route
+              exact
+              path="/"
+              render={props => (
+                <>
+                  <Nav />
+                  <Main />
+                </>
+              )}
+            />
+            <Route component={ErrorRoute} />
+          </Switch>
+        </Context.Provider>
       </div>
     );
   }

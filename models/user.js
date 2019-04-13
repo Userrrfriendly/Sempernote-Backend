@@ -11,16 +11,26 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  createdEvents: [
+  username: {
+    type: String,
+    required: true
+  },
+  notes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Note"
+    }
+  ],
+  favorites: [
     {
       type: Schema.Types.ObjectId,
       ref: "Event"
     }
   ],
-  createdNotes: [
+  createdEvents: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Note"
+      ref: "Event"
     }
   ]
 });

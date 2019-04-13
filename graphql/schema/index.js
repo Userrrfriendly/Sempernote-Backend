@@ -18,14 +18,20 @@ type Event {
   creator: User!
 }
 
+input EventInput {
+  title: String!
+  description: String!
+  price: Float!
+  date: String!
+}
+
 type User {
   _id: ID!
+  username: String!
   email: String!
   password: String
-  createdNotes: [Note!]
-  notebooks: [Notebook!]
-  tags: [Tag!]
-  favourites:[Favorite!]
+  notes: [Note!]
+  favourites:[Note!]
   createdEvents: [Event!]
 }
 
@@ -38,56 +44,22 @@ type Note {
   creator: User!
 }
 
-type Trash {
-  _id: ID!
-  title: String!
-  body: String!
-  createdAt: String!
-  updatedAt: String!
-  creator: User!
-}
-
-type Notebook {
-  _id: ID!
-  title: String!
-  createdAt: String!
-  updatedAt: String!
-  notes: [Note!]
-}
-
-type Tag {
-  _id: ID!
-  title: String!
-  notes: [Note!]
-}
-
-type Favorite {
-  _id: ID!
-  createdAt: String!
-  notes: [Note!]
-}
-
 type AuthData {
   userId: ID!
   token: String!
   tokenExpiration: Int!
 }
 
-input EventInput {
-  title: String!
-  description: String!
-  price: Float!
-  date: String!
-}
-
 input UserInput {
   email: String!
   password: String!
+  username: String!
 }
 
 input NoteInput {
   title: String!
   body: String!
+  isTrash: Boolean!
 }
 
 type RootQuery {
@@ -95,12 +67,12 @@ type RootQuery {
     events: [Event!]!
     bookings: [Booking!]!
     login(email: String!, password: String!): AuthData!
+    userNotes(userId: ID!): [Note!]
 }
 
 type RootMutation {
     createNote(noteInput: NoteInput): Note
     deleteNote(noteID: ID!): Note!
-    movetoTrash(noteID: ID!): Note!
     createEvent(eventInput: EventInput): Event
     createUser(userInput: UserInput): User
     bookEvent(eventId: ID!): Booking!
