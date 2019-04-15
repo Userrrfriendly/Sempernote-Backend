@@ -8,11 +8,11 @@ class AuthScreen extends Component {
     username: "",
     password: "",
     email: "",
-    failedLogIn: false,
-    failedSignUp: false
+    failedLogIn: false
   };
 
   static contextType = Context;
+  // myRef = React.createRef();
 
   toggleLogIn = () => {
     this.setState(prevState => {
@@ -23,8 +23,7 @@ class AuthScreen extends Component {
   onChange = e => {
     this.setState({
       [e.target.id]: e.target.value,
-      failedLogIn: false,
-      failedSignUp: false
+      failedLogIn: false
     });
   };
 
@@ -32,107 +31,74 @@ class AuthScreen extends Component {
     e.preventDefault();
     const { email, password, username } = { ...this.state };
 
-    //SUBMIT SIGN UP
+    let requestBody = {
+      query: `
+        query {
+          login(email: "${email}", password: "${password}") {
+            userId
+            token
+            tokenExpiration
+          }
+        }
+      `
+    };
+
     if (!this.state.logIn) {
-      const requestBody = {
+      requestBody = {
         query: `
           mutation {
             createUser(userInput: {username:"${username}",email: "${email}", password: "${password}"}) {
               _id
               email
-              username
             }
           }
         `
       };
-
-      fetch("http://localhost:8000/graphql", {
-        method: "POST",
-        body: JSON.stringify(requestBody),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => {
-          if (res.status !== 200 && res.status !== 201) {
-            throw new Error("Failed!");
-          }
-          return res.json();
-        })
-        .then(resData => {
-          console.log(resData);
-          if (resData.data.createUser) {
-            // console.log(
-            //   `successfully created user ${username}... redirecting to LOG IN`
-            // );
-            window.M.toast({
-              html: `User ${username} created succesfully! You can now Login`,
-              classes: "rounded green"
-            });
-            this.setState({
-              logIn: true,
-              password: ""
-            });
-          } else if (resData.errors) {
-            // console.log(resData.errors[0]);
-            this.setState({
-              failedSignUp: true
-            });
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    } else {
-      //SUBMIT LOG IN
-      const requestBody = {
-        query: `
-          query {
-            login(email: "${email}", password: "${password}") {
-              userId
-              token
-              tokenExpiration
-            }
-          }
-        `
-      };
-
-      fetch("http://localhost:8000/graphql", {
-        method: "POST",
-        body: JSON.stringify(requestBody),
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => {
-          if (res.status !== 200 && res.status !== 201) {
-            if (res.status === 500) {
-              //Can't finda a way to access the error message in the response body
-              this.setState({
-                failedLogIn: true
-              });
-            }
-            throw new Error("Failed!");
-          }
-          return res.json();
-        })
-        .then(resData => {
-          console.log(resData);
-          if (resData.data.login.token) {
-            this.context.login(
-              resData.data.login.token,
-              resData.data.login.userId,
-              resData.data.login.tokenExpiration
-            );
-          }
-        })
-        .then(() => {
-          this.context.fetchGlobalData();
-        })
-        .catch(err => {
-          console.log(err);
-        });
     }
+
+    // console.log(requestBody);
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          if (res.status === 500) {
+            //Can't finda a way to access the error message in the response body
+            this.setState({
+              failedLogIn: true
+            });
+          }
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData);
+        console.log(resData.errors[0]);
+        if (this.state.logIn && resData.data.login.token) {
+          this.context.login(
+            resData.data.login.token,
+            resData.data.login.userId,
+            resData.data.login.tokenExpiration
+          );
+        }
+      })
+      .then(() => {
+        if (this.state.logIn) {
+          this.context.fetchGlobalData();
+        } else {
+          this.setState({
+            logIn: true
+          });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -173,11 +139,6 @@ class AuthScreen extends Component {
                     id="email"
                   />
                 </div>
-                {this.state.failedSignUp && (
-                  <p className="red-text">
-                    A user with this email already exists
-                  </p>
-                )}
                 <div className="form-field left-align">
                   <label htmlFor="password">Password</label>
                   <input
@@ -209,7 +170,7 @@ class AuthScreen extends Component {
                 <button
                   type="submit"
                   style={{ borderColor: "#ffb74d" }}
-                  className="btn btn-large orange lighten-2 black-text waves-effect waves-light tooltipped disabled"
+                  className="btn btn-large orange lighten-2 black-text waves-effect waves-light tooltipped"
                   data-position="bottom"
                   data-tooltip="Log in without registration - for demonstration purposes only"
                   name="action"

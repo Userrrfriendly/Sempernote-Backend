@@ -16,6 +16,11 @@ const noteSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User"
     },
+    notebook: {
+      type: Schema.Types.ObjectId,
+      ref: "Notebook",
+      required: true
+    },
     isTrash: {
       type: Boolean,
       default: false,

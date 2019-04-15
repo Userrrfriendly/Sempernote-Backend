@@ -47,6 +47,7 @@ type Note {
   _id: ID!
   title: String!
   body: String!
+  notebook: Notebook!
   createdAt: String!
   updatedAt: String!
   creator: User!
@@ -68,6 +69,7 @@ input NoteInput {
   title: String!
   body: String!
   isTrash: Boolean!
+  notebook: String!
 }
 
 type RootQuery {

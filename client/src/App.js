@@ -18,7 +18,9 @@ class App extends Component {
   };
 
   componentDidMount() {
-    M.AutoInit();
+    window.M = M;
+    window.M.AutoInit();
+    // M.AutoInit(); original code was this oneliner
   }
 
   login = (token, userId, tokenExpiration) => {
@@ -30,7 +32,7 @@ class App extends Component {
   };
 
   fetchGlobalData = () => {
-    //It actually makes more sense to land on a user gather all his data (facorites tags notebooks etc) and then extrapolate to notes
+    //It actually makes more sense to land on a user gather all his data (favorites tags notebooks etc) and then extrapolate to notes
     let requestBody = {
       query: `
         query {

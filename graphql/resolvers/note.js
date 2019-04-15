@@ -34,6 +34,7 @@ module.exports = {
       title: args.noteInput.title,
       body: args.noteInput.body,
       creator: req.userId,
+      notebook: args.noteInput.notebook,
       isTrash: false
     });
 

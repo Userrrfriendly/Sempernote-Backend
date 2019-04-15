@@ -31,38 +31,6 @@ class Main extends Component {
   }
 
   render() {
-    // const renderNotes = () => {
-    //   this.context.globalState.userNotes.map(note => {
-    //     return (
-    //       <NotePreview
-    //         key={note._id}
-    //         name={note.title}
-    //         updated={note.updatedAt}
-    //         body={note.body}
-    //       />
-    //     );
-    //   });
-
-    //   let data;
-
-    //   if (this.context.globalState) {
-    //     data = this.context.globalState.userNotes;
-    //     console.log(data);
-    //     data.map(note => {
-    //       return (
-    //         <NotePreview
-    //           key={note._id}
-    //           name={note.title}
-    //           updated={note.updatedAt}
-    //           body={note.body}
-    //         />
-    //       );
-    //     });
-    //   } else {
-    //     return <p>No Data yet</p>;
-    //   }
-    // };
-
     const renderNotes = this.context.globalState
       ? this.context.globalState.userNotes.map(note => {
           return (
@@ -75,16 +43,6 @@ class Main extends Component {
           );
         })
       : "no notes yet";
-    // const test = data.notes.map(note => {
-    //   return (
-    //     <NotePreview
-    //       key={note.id}
-    //       name={note.name}
-    //       updated={note.updated}
-    //       body={note.body}
-    //     />
-    //   );
-    // });
 
     return (
       <main className="main-section l10">

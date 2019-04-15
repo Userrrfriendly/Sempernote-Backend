@@ -18,6 +18,7 @@ const events = async eventIds => {
 const notes = async notesIds => {
   try {
     const notes = await Note.find({ _id: { $in: notesIds } });
+    // console.log(notes);
     return notes.map(note => {
       return transformNote(note);
     });
@@ -63,21 +64,21 @@ const transformEvent = event => {
 };
 
 const transformNote = note => {
+  console.log("transformNotebooks.bind(this, note.notebook)");
+
   return {
     ...note._doc,
     _id: note.id,
     createdAt: dateToString(note._doc.createdAt),
     updatedAt: dateToString(note._doc.updatedAt),
-    creator: user.bind(this, note.creator)
+    creator: user.bind(this, note._doc.creator),
+    notebook: transformSingleNotebook.bind(this, note._doc.notebook)
   };
 };
 
 const transformNotebooks = async notebooksIDS => {
   const notebooks = await Notebook.find({ _id: { $in: notebooksIDS } });
-  console.log(notebooks);
-  //THEORY map is syncronous and it screws me over (no console.log)
   return notebooks.map(notebook => {
-    console.log(notebook._doc);
     return {
       ...notebook._doc,
       _id: notebook.id,
@@ -85,29 +86,18 @@ const transformNotebooks = async notebooksIDS => {
       notes: notes.bind(this, notebook._doc.notes)
     };
   });
-  // const result = await function(notebooks = notebooks) {
-  //   console.log(notebooks);
-  //   console.log("testsdfdsgfdfas sdf ");
-  // let finalResult = [];
-  // for (let i = 0; i < notebooksIDS.length; i++) {
-  //   finalResult.push({ test: "test" });
-  // }
-  // return finalResult;
 };
-// console.log(finalResult);
-// return result;
-
-// };
 
 //This transforms a single noteBOOK keep for now just for back up
-// const transformNotebook = notebook => {
-//   return {
-//     ...notebook._doc,
-//     _id: notebook.id,
-//     creator: user.bind(this, notebook._doc.creator),
-//     notes: notes.bind(this, notebook._doc.notes)
-//   };
-// };
+const transformSingleNotebook = async singleNotebook => {
+  const notebook = await Notebook.findById(singleNotebook);
+  return {
+    ...notebook._doc,
+    _id: notebook.id,
+    creator: user.bind(this, notebook._doc.creator),
+    notes: notes.bind(this, notebook._doc.notes)
+  };
+};
 
 const transformBooking = booking => {
   return {
@@ -124,7 +114,4 @@ exports.transformEvent = transformEvent;
 exports.transformBooking = transformBooking;
 exports.transformNote = transformNote;
 exports.transformNotebooks = transformNotebooks;
-
-// exports.user = user;
-// exports.events = events;
-// exports.singleEvent = singleEvent;
+exports.transformSingleNotebook = transformSingleNotebook;

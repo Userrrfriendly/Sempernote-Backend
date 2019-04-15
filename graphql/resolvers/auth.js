@@ -23,38 +23,37 @@ module.exports = {
         notebooks: []
       });
 
-      // const result = await user.save();
       await user.save();
+      // create a default notebook
+      const defaultNotebook = new Notebook({
+        name: user.username + "'s Notebook",
+        creator: user._id,
+        // notes: [defaultNote._id]
+        notes: []
+      });
       //create a default note
       const defaultNote = new Note({
         title: "Wellcome to SemperNote!",
         body:
           "Thanks for registering! Create notes, tag them star them edit them and more!",
-        creator: user._id
-      });
-
-      // create a default notebook
-      const defaultNotebook = new Notebook({
-        name: user.username + "'s Notebook",
         creator: user._id,
-        notes: [defaultNote._id]
+        notebook: defaultNotebook._id
       });
 
-      await defaultNote.save();
+      await defaultNotebook.notes.push(defaultNote);
       await defaultNotebook.save();
+      await defaultNote.save();
       await user.notebooks.push(defaultNotebook.id);
+
       await user.save();
 
-      //The transformNotebook should be refactored to recieve an array of notebooks
       const result = transformNotebooks(user.notebooks);
-      // console.log(transformNotebooks);
 
       return {
         ...user._doc,
         password: null,
         _id: user.id,
         notebooks: result
-        // notebooks: transformNotebooks.bind(this, user.notebooks)
       };
     } catch (err) {
       throw err;

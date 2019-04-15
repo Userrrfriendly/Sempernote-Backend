@@ -4,6 +4,7 @@ import React from "react";
 import Logo from "../svg-icons/platypus-logo";
 import Drawer from "../drawer/drawer";
 import M from "materialize-css";
+
 class Nav extends React.Component {
   componentDidMount() {
     M.AutoInit();
