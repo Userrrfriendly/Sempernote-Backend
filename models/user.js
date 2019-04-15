@@ -15,6 +15,12 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
+  notebooks: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Notebook"
+    }
+  ],
   notes: [
     {
       type: Schema.Types.ObjectId,

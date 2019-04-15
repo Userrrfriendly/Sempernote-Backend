@@ -47,7 +47,7 @@ module.exports = {
       if (!creator) {
         throw new Error("User not found.");
       }
-      creator.createdNotes.push(note);
+      creator.notes.push(note);
       await creator.save();
       return createdNote;
     } catch (err) {

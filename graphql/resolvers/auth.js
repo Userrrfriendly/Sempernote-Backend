@@ -2,6 +2,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../../models/user");
+const Notebook = require("../../models/notebook");
+const Note = require("../../models/note");
+
+const { transformNotebooks } = require("./merge");
 
 module.exports = {
   createUser: async args => {
@@ -15,16 +19,48 @@ module.exports = {
       const user = new User({
         email: args.userInput.email,
         password: hashedPassword,
-        username: args.userInput.username
+        username: args.userInput.username,
+        notebooks: []
       });
 
-      const result = await user.save();
+      // const result = await user.save();
+      await user.save();
+      //create a default note
+      const defaultNote = new Note({
+        title: "Wellcome to SemperNote!",
+        body:
+          "Thanks for registering! Create notes, tag them star them edit them and more!",
+        creator: user._id
+      });
 
-      return { ...result._doc, password: null, _id: result.id };
+      // create a default notebook
+      const defaultNotebook = new Notebook({
+        name: user.username + "'s Notebook",
+        creator: user._id,
+        notes: [defaultNote._id]
+      });
+
+      await defaultNote.save();
+      await defaultNotebook.save();
+      await user.notebooks.push(defaultNotebook.id);
+      await user.save();
+
+      //The transformNotebook should be refactored to recieve an array of notebooks
+      const result = transformNotebooks(user.notebooks);
+      // console.log(transformNotebooks);
+
+      return {
+        ...user._doc,
+        password: null,
+        _id: user.id,
+        notebooks: result
+        // notebooks: transformNotebooks.bind(this, user.notebooks)
+      };
     } catch (err) {
       throw err;
     }
   },
+
   login: async ({ email, password }) => {
     const user = await User.findOne({ email: email });
     if (!user) {
@@ -42,12 +78,11 @@ module.exports = {
       }
     );
     return { userId: user.id, token: token, tokenExpiration: 1 };
-  }
-  // from scema RootQuery  user(userId: ID!): User!
+  },
 
-  // user: async args => {
-  //   console.log(args.userId);
-  //   const user = await User.findById(args.userId);
-  //   return { _id: user.id, email: user.email, notes: user.notes };
-  // }
+  user: async args => {
+    const user = await User.findById(args.userId);
+    console.log(user.notes);
+    return { _id: user.id, email: user.email, notes: user.notes };
+  }
 };

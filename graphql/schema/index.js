@@ -30,9 +30,17 @@ type User {
   username: String!
   email: String!
   password: String
+  notebooks: [Notebook!]!
   notes: [Note!]
   favourites:[Note!]
   createdEvents: [Event!]
+}
+
+type Notebook {
+  _id: ID!
+  name: String!
+  notes:[Note!]
+  creator: User!
 }
 
 type Note {
@@ -68,6 +76,7 @@ type RootQuery {
     bookings: [Booking!]!
     login(email: String!, password: String!): AuthData!
     userNotes(userId: ID!): [Note!]
+    user(userId: ID!): User!
 }
 
 type RootMutation {
@@ -77,6 +86,7 @@ type RootMutation {
     createUser(userInput: UserInput): User
     bookEvent(eventId: ID!): Booking!
     cancelBooking(bookingId: ID!): Event!
+    createNotebook(name: String!): Notebook!
 }
 
 schema {
