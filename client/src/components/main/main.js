@@ -1,33 +1,19 @@
 import React, { Component } from "react";
+import Editor from "../editor/editor";
 
 import "./main.css";
 // import * as data from "../../data";
 import NotePreview from "./notePreview";
 import Context from "../../context/context";
 
-// const test = [
-//   "fsdfsdfs fsd sdf sdf ",
-//   () => (
-//     <>
-//       <strong>
-//         <em>I am StronG! </em>
-//       </strong>
-//       <ul>
-//         <li>I</li>
-//         <li>II</li>
-//         <li>III</li>
-//       </ul>
-//     </>
-//   ),
-//   " i am not strong. ",
-//   "https://dev.to/donghyukjacobjang/how-to-prevent-xss-attacks-when-using-dangerouslysetinnerhtml-in-react-1464"
-// ];
 class Main extends Component {
   static contextType = Context;
 
+  // test = this.context.globalState.userNotes[0];
+
   componentDidUpdate() {
-    console.log("this is from the main");
-    console.log(this.context.globalState);
+    console.log("<Main/> didUpdate");
+    // console.log(this.context.globalState);
   }
 
   render() {
@@ -39,27 +25,27 @@ class Main extends Component {
               name={note.title}
               updated={note.updatedAt}
               body={note.body}
+              id={note._id}
+              setActiveNote={this.context.setActiveNote}
             />
           );
         })
       : "no notes yet";
 
+    const test = this.context.globalState
+      ? this.context.globalState.userNotes.map(note => {
+          return note.body;
+        })
+      : "WTF";
+
     return (
       <main className="main-section l10">
-        {renderNotes}
-
-        {/*OLD TESTING LEAVE IT FOR NOW {test.map(item => (typeof item === "string" ? item : item()))} */}
-
-        {/* {data.notes.map(note => {
-          return (
-            <NotePreview
-              key={note.id}
-              name={note.name}
-              updated={note.updated}
-              body={note.body}
-            />
-          );
-        })} */}
+        {console.log(test)}
+        {this.context.activeNote ? (
+          <Editor note={this.context.globalState.userNotes[0].body} />
+        ) : (
+          renderNotes
+        )}
       </main>
     );
   }

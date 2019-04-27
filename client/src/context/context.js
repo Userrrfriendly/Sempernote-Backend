@@ -4,7 +4,9 @@ export default React.createContext({
   token: null,
   userId: null,
   globalState: null,
+  activeNote: null,
   login: (token, userId, tokenExpiration) => {},
   logout: () => {},
-  fetchGlobalData: () => {}
+  fetchGlobalData: () => {},
+  setActiveNote: () => {}
 });

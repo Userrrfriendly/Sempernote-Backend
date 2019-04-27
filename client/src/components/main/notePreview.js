@@ -1,5 +1,6 @@
 import React from "react";
 import moment from "moment";
+// import Context from "../../context/context";
 
 const NotePreview = props => {
   const shortenStr = str => {
@@ -10,8 +11,24 @@ const NotePreview = props => {
     return str;
   };
 
+  const openNote = e => {
+    console.log("note opened");
+    let noteId;
+    if (e.target.getAttribute("data-note-id")) {
+      noteId = e.target.getAttribute("data-note-id");
+    } else {
+      noteId = e.target.parentElement.getAttribute("data-note-id");
+    }
+    console.log(noteId);
+    props.setActiveNote(noteId);
+  };
+
   return (
-    <section className="note-thumbnail-container">
+    <section
+      data-note-id={props.id}
+      onClickCapture={openNote}
+      className="note-thumbnail-container"
+    >
       <p className="note-thumb-text thumb-date">
         {moment(props.updated).format("LLL")}
       </p>

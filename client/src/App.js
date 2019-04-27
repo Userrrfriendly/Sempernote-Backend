@@ -14,7 +14,8 @@ class App extends Component {
   state = {
     token: false,
     userId: null,
-    globalState: null
+    globalState: null,
+    activeNote: null
   };
 
   componentDidMount() {
@@ -29,6 +30,12 @@ class App extends Component {
 
   logout = () => {
     this.setState({ token: null, userId: null });
+  };
+
+  setActiveNote = noteId => {
+    this.setState({
+      activeNote: noteId ? noteId : null
+    });
   };
 
   fetchGlobalData = () => {
@@ -78,10 +85,12 @@ class App extends Component {
           value={{
             token: this.state.token,
             userId: this.state.userId,
+            activeNote: this.state.activeNote,
             login: this.login,
             logout: this.logout,
             fetchGlobalData: this.fetchGlobalData,
-            globalState: this.state.globalState
+            globalState: this.state.globalState,
+            setActiveNote: this.setActiveNote
           }}
         >
           <Switch>

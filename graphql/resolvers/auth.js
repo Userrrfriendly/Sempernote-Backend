@@ -36,6 +36,10 @@ module.exports = {
         title: "Wellcome to SemperNote!",
         body:
           "Thanks for registering! Create notes, tag them star them edit them and more!",
+        // `"{"ops":[{"insert":"THANKS FOR REGISTERING!"},{"attributes":{"align":"center","header":1},"insert":"\n"},{"attributes":{"align":"center"},"insert":"\n"},{"attributes":{"size":"large"},"insert":"DETAILED INSTRUCTIONS COMING SOON!!!!"},{"attributes":{"align":"justify"},"insert":"\n"}]}"`,
+        // `{"ops":[{"insert":"THANKS FOR REGISTERING"},{"attributes":{"align":"center","header":1},"insert":"\n"},{"attributes":{"align":"center"},"insert":"\n"},{"attributes":{"size":"large"},"insert":"More info will come soooooon!"},{"attributes":{"align":"center"},"insert":"\n"}]}`,
+        // `{"ops":[{"insert":"THANKS FOR REGISTERING"},{"attributes":{"align":"center","header":1},"insert":"\n"},{"attributes":{"size":"large"},"insert":"NOW PIKE OFFF!"},{"attributes":{"align":"right","header":2},"insert":"\n"}]}`,
+        // `{"ops":[{"attributes":{"underline":true},"insert":"Hello Hell"},{"insert":"\n"},{"attributes":{"underline":true},"insert":"gdfgsdfgs "},{"attributes":{"align":"right"},"insert":"\n\n"},{"attributes":{"underline":true},"insert":"headingn!"},{"attributes":{"align":"center","header":1},"insert":"\n"}]}`,
         creator: user._id,
         notebook: defaultNotebook._id
       });
