@@ -2,6 +2,7 @@
   background-color: antiquewhite;
   width: 100%;
   height: calc(100vh - 3rem);
+  display: flex;
 }
 
 .note-thumbnail-container {
@@ -30,4 +31,10 @@
 
 .thumb-title {
   font-size: 1.2rem;
+}
+
+.note-container {
+  width: 40%;
+  max-width: 100%;
+  flex-grow: 1;
 }

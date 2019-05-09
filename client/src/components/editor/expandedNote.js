@@ -3,13 +3,12 @@ import Quill from "quill";
 import Delta from "quill-delta";
 import "./quillSnow.css";
 
-class Editor extends Component {
+class ExpandedNote extends Component {
   editorRef = React.createRef();
 
   componentDidMount() {
-    // console.log(this.editorRef);
     const toolbarOptions = [
-      ["bold", "bold", "italic", "underline", "strike"], // toggled buttons
+      ["bold", "italic", "underline", "strike"], // toggled buttons
       [{ color: [] }, { background: [] }], // dropdown with defaults from theme
       ["blockquote", "code-block"],
 
@@ -34,24 +33,21 @@ class Editor extends Component {
       theme: "snow" // Specify theme in configuration
     });
 
-    console.log(this.props.note);
-    // window.note = this.props.note;
-    // window.editor = this.editor;
-    // const testJson = JSON.parse(this.props.note);
-    // const delta = new Delta(testJson);
-    //set contents JSON
-    // this.editor.setContents(delta);
-    this.editor.setText(this.props.note + "\n");
-  }
+    const resultDelta = new Delta(JSON.parse(this.props.note));
 
+    this.editor.setContents(resultDelta);
+  }
+  /*
+  getDelta & setDelta ARE USED ONLY IN DEBUGGING
+  
   getDelta = () => {
-    //*Get Delta
+    //*Get Delta from editor
     const delta = this.editor.getContents();
 
     window.delta = delta;
     //*Convert Delta to string
     const strFromDelta = JSON.stringify(delta);
-    // console.log(strFromDelta);
+    //to get the string from delta to insert it in mongo as default note use console.log(JSON.stringify(strFromDelta))
     window.strFromDelta = strFromDelta;
     // *Convert string to Delta
     const resultDelta = new Delta(JSON.parse(strFromDelta));
@@ -63,13 +59,14 @@ class Editor extends Component {
     //*Set Delta
     this.editor.setContents(window.resultDelta);
   };
-
+*/
   render() {
     return (
-      <>
+      <div className="editor-container">
         <div ref={this.editorRef} className="editor">
           Hello Hell
         </div>
+        {/* THE BUTTONS ARE USED ONLY IN DEBUGGING 
         <button className="btn" onClick={this.getDelta}>
           Get Delta
         </button>
@@ -80,9 +77,10 @@ class Editor extends Component {
         >
           SET Delta
         </button>
-      </>
+        */}
+      </div>
     );
   }
 }
 
-export default Editor;
+export default ExpandedNote;
