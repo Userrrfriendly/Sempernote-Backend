@@ -95,11 +95,12 @@ class App extends Component {
         >
           <Switch>
             {!this.state.token && <Redirect exact from="/" to="/auth/" />}
-            {this.state.token && <Redirect exact from="/auth/" to="/" />}
+            {!this.state.token && <Redirect from="/main/" to="/auth/" />}
+            {this.state.token && <Redirect exact from="/auth/" to="/main/" />}
             <Route path="/auth" component={AuthScreen} />
             <Route
-              exact
-              path="/"
+              // exact
+              path="/main/"
               render={props => (
                 <>
                   <Nav />

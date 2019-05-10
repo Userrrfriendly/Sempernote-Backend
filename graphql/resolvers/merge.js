@@ -39,11 +39,13 @@ const singleEvent = async eventId => {
 const user = async userId => {
   try {
     const user = await User.findById(userId);
-
+    console.log("merge/user()...");
+    console.log(user);
     return {
       ...user._doc,
       _id: user.id,
       password: null,
+      username: user._doc.username,
       createdEvents: events.bind(this, user._doc.createdEvents),
       notes: notes.bind(this, user._doc.notes),
       notebooks: transformNotebooks.bind(this, user._doc.notebooks)

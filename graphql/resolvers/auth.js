@@ -6,6 +6,8 @@ const Notebook = require("../../models/notebook");
 const Note = require("../../models/note");
 
 const { transformNotebooks } = require("./merge");
+//test
+const { userFromMerge } = require("./merge");
 
 module.exports = {
   createUser: async args => {
@@ -35,7 +37,7 @@ module.exports = {
       const defaultNote = new Note({
         title: "Wellcome to SemperNote!",
         body:
-          // Default body is a stringified delta
+          // Default body is a stringified quill delta
           '{"ops":[{"attributes":{"bold":true},"insert":"Thanks "},{"attributes":{"italic":true},"insert":"for "},{"attributes":{"underline":true},"insert":"registering"},{"insert":"! "},{"attributes":{"strike":true},"insert":"Create "},{"insert":"notes, tag them star them edit them and more!\\nlist"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"list"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"list3"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"\\n"}]}',
         creator: user._id,
         notebook: defaultNotebook._id
@@ -78,11 +80,12 @@ module.exports = {
       }
     );
     return { userId: user.id, token: token, tokenExpiration: 1 };
-  },
-
-  user: async args => {
-    const user = await User.findById(args.userId);
-    console.log(user.notes);
-    return { _id: user.id, email: user.email, notes: user.notes };
   }
+
+  // user: userFromMerge
+  // user: async args => {
+  //   const user = await User.findById(args.userId);
+  //   console.log(user);
+  //   return { ...user._doc, _id: user.id, email: user.email, notes: user.notes };
+  // }
 };
