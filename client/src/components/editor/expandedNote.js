@@ -6,6 +6,10 @@ import "./quillSnow.css";
 class ExpandedNote extends Component {
   editorRef = React.createRef();
 
+  state = {
+    body: new Delta(JSON.parse(this.props.note))
+  };
+
   componentDidMount() {
     const toolbarOptions = [
       ["bold", "italic", "underline", "strike"], // toggled buttons
@@ -33,9 +37,15 @@ class ExpandedNote extends Component {
       theme: "snow" // Specify theme in configuration
     });
 
-    const resultDelta = new Delta(JSON.parse(this.props.note));
+    // const noteBody = new Delta(JSON.parse(this.props.note));
 
-    this.editor.setContents(resultDelta);
+    this.editor.setContents(this.state.body);
+  }
+
+  componentDidUpdate() {
+    // const noteBody = new Delta(JSON.parse(this.props.note));
+    // this.editor.setContents(noteBody);
+    console.log("EDITO UPDATED");
   }
   /*
   getDelta & setDelta ARE USED ONLY IN DEBUGGING
@@ -50,14 +60,14 @@ class ExpandedNote extends Component {
     //to get the string from delta to insert it in mongo as default note use console.log(JSON.stringify(strFromDelta))
     window.strFromDelta = strFromDelta;
     // *Convert string to Delta
-    const resultDelta = new Delta(JSON.parse(strFromDelta));
-    // console.log(resultDelta);
-    window.resultDelta = resultDelta;
+    const noteBody = new Delta(JSON.parse(strFromDelta));
+    // console.log(noteBody);
+    window.noteBody = noteBody;
   };
 
   setDelta = () => {
     //*Set Delta
-    this.editor.setContents(window.resultDelta);
+    this.editor.setContents(window.noteBody);
   };
 */
   render() {

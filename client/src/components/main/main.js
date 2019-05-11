@@ -6,36 +6,56 @@ import Context from "../../context/context";
 import "./main.css";
 import ExpandedNote from "../editor/expandedNote";
 import NoteListItem from "./NoteListItem";
-// import ExpandedNote from "../editor/expandedNote";
 
 class Main extends Component {
   static contextType = Context;
 
-  // componentDidUpdate() {
-  //   console.log("<Main/> didUpdate");
-  // }
-
-  expandNote = (e, noteId) => {
-    // console.log(`note with ID ${noteId} expanded`);
+  expandNote = (noteId, notebookId) => {
+    console.log(
+      `note with ID ${noteId} and notebookID: ${notebookId} expanded`
+    );
+    this.context.setActiveNotebook(notebookId);
     this.context.setActiveNote(noteId);
   };
 
+  componentDidUpdate() {
+    console.log("MAIN updated");
+  }
   render() {
-    const renderNotes = this.context.globalState
-      ? this.context.globalState.userNotes.map(note => {
-          return (
-            <NoteListItem
-              key={note._id}
-              name={note.title}
-              updated={note.updatedAt}
-              body={note.body}
-              id={note._id}
-              setActiveNote={this.context.setActiveNote}
-              expandNote={this.expandNote.bind(this, note._id)}
-            />
-          );
+    // WARNING UGLY CODE AHEAD renderNotes will break if a notebook doesn't contain notes! REFACTOR!!!
+    const renderNotes = this.context.userData
+      ? this.context.userData.notebooks.map(notebook => {
+          return notebook.notes.map(note => {
+            return (
+              <NoteListItem
+                notebook={notebook.name}
+                notebookId={notebook._id}
+                key={note._id}
+                name={note.title}
+                updated={note.updatedAt}
+                body={note.body}
+                id={note._id}
+                setActiveNote={this.context.setActiveNote}
+                expandNote={this.expandNote.bind(this, note._id, notebook._id)}
+              />
+            );
+          });
         })
       : "no notes yet";
+    // .userNotes.map(note => {
+    //     return (
+    //       <NoteListItem
+    //         key={note._id}
+    //         name={note.title}
+    //         updated={note.updatedAt}
+    //         body={note.body}
+    //         id={note._id}
+    //         setActiveNote={this.context.setActiveNote}
+    //         expandNote={this.expandNote.bind(this, note._id)}
+    //       />
+    //     );
+    //   })
+    // : "no notes yet";
 
     const containerCssClass = this.context.activeNote
       ? "hide-on-small-only note-container"
@@ -98,17 +118,28 @@ class Main extends Component {
             path="/main/editor/"
             render={props => (
               <>
-                {this.context.activeNote && (
+                {this.context.activeNote && this.context.activeNotebook && (
                   <ExpandedNote
-                    note={this.context.globalState.userNotes[0].body}
+                    note={
+                      this.context.userData.notebooks
+                        .find(
+                          notebook =>
+                            notebook._id === this.context.activeNotebook
+                        )
+                        .notes.find(
+                          note => note._id === this.context.activeNote
+                        ).body
+                    }
                   />
+
+                  // const selectedPerson = peopleArray.find(person => person.id === idToSelect)
                 )}
               </>
             )}
           />
         </Switch>
         {/* {this.context.activeNote && (
-          <ExpandedNote note={this.context.globalState.userNotes[0].body} />
+          <ExpandedNote note={this.context.userData.userNotes[0].body} />
         )} */}
       </main>
     );

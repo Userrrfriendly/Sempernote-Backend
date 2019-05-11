@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./authscreen.css";
 import Context from "../../context/context";
-
+// import { arrayToObject } from "../../helpers/helpers";
 class AuthScreen extends Component {
   state = {
     logIn: true,
@@ -11,6 +11,18 @@ class AuthScreen extends Component {
     failedLogIn: false,
     failedSignUp: false
   };
+
+  // componentDidMount() {
+  //   const peopleArray = [
+  //     { id: 123, name: "dave", age: 23 },
+  //     { id: 456, name: "chris", age: 23 },
+  //     { id: 789, name: "bob", age: 23 },
+  //     { id: 101, name: "tom", age: 23 },
+  //     { id: 102, name: "tim", age: 23 }
+  //   ];
+  //   const test = arrayToObject(peopleArray, "id");
+  //   console.log(test);
+  // }
 
   static contextType = Context;
 
@@ -127,7 +139,7 @@ class AuthScreen extends Component {
           }
         })
         .then(() => {
-          this.context.fetchGlobalData();
+          this.context.fetchUserData();
         })
         .catch(err => {
           console.log(err);

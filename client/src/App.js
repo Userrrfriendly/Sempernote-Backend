@@ -10,12 +10,18 @@ import ErrorRoute from "./components/ErrorRoute/errorRoute";
 import AuthScreen from "./components/authScreen/authscreen";
 import Context from "./context/context";
 
+// import { arrayToObject } from "./helpers/helpers";
+import { mergeNotes } from "./helpers/helpers";
+
 class App extends Component {
   state = {
     token: false,
     userId: null,
-    globalState: null,
-    activeNote: null
+    userData: null,
+    activeNote: null,
+    activeNotebook: null,
+    notebooks: null,
+    notes: null
   };
 
   componentDidMount() {
@@ -38,20 +44,34 @@ class App extends Component {
     });
   };
 
-  fetchGlobalData = () => {
-    //It actually makes more sense to land on a user gather all his data (favorites tags notebooks etc) and then extrapolate to notes
+  setActiveNotebook = notebookId => {
+    this.setState({
+      activeNotebook: notebookId ? notebookId : null
+    });
+  };
+
+  fetchUserData = () => {
     let requestBody = {
       query: `
         query {
-          userNotes(userId: "${this.state.userId}") {
-            title
-            _id
-            body
-            createdAt
-            updatedAt
+          user(userId: "${this.state.userId}") {
+            username
+            notebooks {
+              _id
+              name
+              notes{
+                _id
+                title
+                body
+                createdAt
+                updatedAt
+                notebook{
+                  _id
+                }
+              }
+            }
           }
-        }
-      `
+        }`
     };
 
     fetch("http://localhost:8000/graphql", {
@@ -69,9 +89,12 @@ class App extends Component {
       })
       .then(resData => {
         this.setState({
-          globalState: resData.data
+          userData: resData.data.user,
+          // notebooks: concatNotebooks(resData.data.user.notebooks),
+          notes: mergeNotes(resData.data.user.notebooks)
         });
-        console.log(this.state.globalState);
+        console.log("this.state.userData=");
+        console.log(this.state.userData);
       })
       .catch(err => {
         console.log(err);
@@ -86,11 +109,13 @@ class App extends Component {
             token: this.state.token,
             userId: this.state.userId,
             activeNote: this.state.activeNote,
+            activeNotebook: this.state.activeNotebook,
             login: this.login,
             logout: this.logout,
-            fetchGlobalData: this.fetchGlobalData,
-            globalState: this.state.globalState,
-            setActiveNote: this.setActiveNote
+            fetchUserData: this.fetchUserData,
+            userData: this.state.userData,
+            setActiveNote: this.setActiveNote,
+            setActiveNotebook: this.setActiveNotebook
           }}
         >
           <Switch>
