@@ -45,7 +45,7 @@ class ExpandedNote extends Component {
   componentDidUpdate() {
     // const noteBody = new Delta(JSON.parse(this.props.note));
     // this.editor.setContents(noteBody);
-    console.log("EDITO UPDATED");
+    console.log("EDITOr UPDATED");
   }
   /*
   getDelta & setDelta ARE USED ONLY IN DEBUGGING

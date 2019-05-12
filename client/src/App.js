@@ -10,18 +10,16 @@ import ErrorRoute from "./components/ErrorRoute/errorRoute";
 import AuthScreen from "./components/authScreen/authscreen";
 import Context from "./context/context";
 
-// import { arrayToObject } from "./helpers/helpers";
 import { mergeNotes } from "./helpers/helpers";
-
 class App extends Component {
   state = {
     token: false,
     userId: null,
-    userData: null,
-    activeNote: null,
-    activeNotebook: null,
+    userName: null,
     notebooks: null,
-    notes: null
+    notes: null,
+    activeNote: null,
+    activeNotebook: null
   };
 
   componentDidMount() {
@@ -67,6 +65,7 @@ class App extends Component {
                 updatedAt
                 notebook{
                   _id
+                  name
                 }
               }
             }
@@ -89,12 +88,10 @@ class App extends Component {
       })
       .then(resData => {
         this.setState({
-          userData: resData.data.user,
-          // notebooks: concatNotebooks(resData.data.user.notebooks),
+          userName: resData.data.user.username,
+          notebooks: resData.data.user.notebooks,
           notes: mergeNotes(resData.data.user.notebooks)
         });
-        console.log("this.state.userData=");
-        console.log(this.state.userData);
       })
       .catch(err => {
         console.log(err);
@@ -106,14 +103,10 @@ class App extends Component {
       <div className="App">
         <Context.Provider
           value={{
-            token: this.state.token,
-            userId: this.state.userId,
-            activeNote: this.state.activeNote,
-            activeNotebook: this.state.activeNotebook,
+            ...this.state,
             login: this.login,
             logout: this.logout,
             fetchUserData: this.fetchUserData,
-            userData: this.state.userData,
             setActiveNote: this.setActiveNote,
             setActiveNotebook: this.setActiveNotebook
           }}

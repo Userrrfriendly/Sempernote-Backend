@@ -21,41 +21,29 @@ class Main extends Component {
   componentDidUpdate() {
     console.log("MAIN updated");
   }
+
   render() {
-    // WARNING UGLY CODE AHEAD renderNotes will break if a notebook doesn't contain notes! REFACTOR!!!
-    const renderNotes = this.context.userData
-      ? this.context.userData.notebooks.map(notebook => {
-          return notebook.notes.map(note => {
-            return (
-              <NoteListItem
-                notebook={notebook.name}
-                notebookId={notebook._id}
-                key={note._id}
-                name={note.title}
-                updated={note.updatedAt}
-                body={note.body}
-                id={note._id}
-                setActiveNote={this.context.setActiveNote}
-                expandNote={this.expandNote.bind(this, note._id, notebook._id)}
-              />
-            );
-          });
+    const renderNotes = this.context.notes
+      ? this.context.notes.map(note => {
+          return (
+            <NoteListItem
+              notebookName={note.notebook.name}
+              notebookId={note.notebook._id}
+              key={note._id}
+              name={note.title}
+              updated={note.updatedAt}
+              body={note.body}
+              id={note._id}
+              setActiveNote={this.context.setActiveNote}
+              expandNote={this.expandNote.bind(
+                this,
+                note._id,
+                note.notebook._id
+              )}
+            />
+          );
         })
       : "no notes yet";
-    // .userNotes.map(note => {
-    //     return (
-    //       <NoteListItem
-    //         key={note._id}
-    //         name={note.title}
-    //         updated={note.updatedAt}
-    //         body={note.body}
-    //         id={note._id}
-    //         setActiveNote={this.context.setActiveNote}
-    //         expandNote={this.expandNote.bind(this, note._id)}
-    //       />
-    //     );
-    //   })
-    // : "no notes yet";
 
     const containerCssClass = this.context.activeNote
       ? "hide-on-small-only note-container"
@@ -121,26 +109,17 @@ class Main extends Component {
                 {this.context.activeNote && this.context.activeNotebook && (
                   <ExpandedNote
                     note={
-                      this.context.userData.notebooks
-                        .find(
-                          notebook =>
-                            notebook._id === this.context.activeNotebook
-                        )
-                        .notes.find(
-                          note => note._id === this.context.activeNote
-                        ).body
+                      //this should be refactored later ->pass the note obj and let <ExpandedNote> take care of extracting the right props
+                      this.context.notes.find(
+                        note => note._id === this.context.activeNote
+                      ).body
                     }
                   />
-
-                  // const selectedPerson = peopleArray.find(person => person.id === idToSelect)
                 )}
               </>
             )}
           />
         </Switch>
-        {/* {this.context.activeNote && (
-          <ExpandedNote note={this.context.userData.userNotes[0].body} />
-        )} */}
       </main>
     );
   }
