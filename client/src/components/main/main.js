@@ -6,6 +6,7 @@ import Context from "../../context/context";
 import "./main.css";
 import ExpandedNote from "../editor/expandedNote";
 import NoteListItem from "./NoteListItem";
+import LoadingBlocks from "../loading/loadingBlocks";
 
 class Main extends Component {
   static contextType = Context;
@@ -23,27 +24,25 @@ class Main extends Component {
   }
 
   render() {
-    const renderNotes = this.context.notes
-      ? this.context.notes.map(note => {
-          return (
-            <NoteListItem
-              notebookName={note.notebook.name}
-              notebookId={note.notebook._id}
-              key={note._id}
-              name={note.title}
-              updated={note.updatedAt}
-              body={note.body}
-              id={note._id}
-              setActiveNote={this.context.setActiveNote}
-              expandNote={this.expandNote.bind(
-                this,
-                note._id,
-                note.notebook._id
-              )}
-            />
-          );
-        })
-      : "no notes yet";
+    const renderNotes = this.context.notes ? (
+      this.context.notes.map(note => {
+        return (
+          <NoteListItem
+            notebookName={note.notebook.name}
+            notebookId={note.notebook._id}
+            key={note._id}
+            name={note.title}
+            updated={note.updatedAt}
+            body={note.body}
+            id={note._id}
+            setActiveNote={this.context.setActiveNote}
+            expandNote={this.expandNote.bind(this, note._id, note.notebook._id)}
+          />
+        );
+      })
+    ) : (
+      <LoadingBlocks />
+    );
 
     const containerCssClass = this.context.activeNote
       ? "hide-on-small-only note-container"
