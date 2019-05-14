@@ -25,7 +25,10 @@ const NoteListItem = props => {
   };
 
   return (
-    <section onClick={props.expandNote} className="note-thumbnail-container">
+    <section
+      onClick={props.expandNote}
+      className="note-thumbnail-container z-depth-2"
+    >
       <p className="note-thumb-text thumb-date">
         {moment(props.updated).format("LLL")}
       </p>

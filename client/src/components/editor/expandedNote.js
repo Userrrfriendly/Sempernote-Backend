@@ -7,7 +7,7 @@ class ExpandedNote extends Component {
   editorRef = React.createRef();
 
   state = {
-    body: new Delta(JSON.parse(this.props.note))
+    body: new Delta(JSON.parse(this.props.note.body))
   };
 
   componentDidMount() {
@@ -39,6 +39,17 @@ class ExpandedNote extends Component {
 
     // const noteBody = new Delta(JSON.parse(this.props.note));
 
+    if (this.props.note._id) {
+      this.setState = {
+        body: new Delta(JSON.parse(this.props.note.body))
+      };
+    } else {
+      //if the note doesn't have an _id it means it was just created on the client side so set its body as an empty delta
+      this.setState = {
+        body: new Delta(JSON.parse('"{"ops":[{"insert":"\\n"}]}"'))
+      };
+    }
+
     this.editor.setContents(this.state.body);
   }
 
@@ -47,9 +58,8 @@ class ExpandedNote extends Component {
     // this.editor.setContents(noteBody);
     console.log("EDITOr UPDATED");
   }
-  /*
-  getDelta & setDelta ARE USED ONLY IN DEBUGGING
-  
+  // getDelta & setDelta ARE USED ONLY IN DEBUGGING
+
   getDelta = () => {
     //*Get Delta from editor
     const delta = this.editor.getContents();
@@ -59,6 +69,7 @@ class ExpandedNote extends Component {
     const strFromDelta = JSON.stringify(delta);
     //to get the string from delta to insert it in mongo as default note use console.log(JSON.stringify(strFromDelta))
     window.strFromDelta = strFromDelta;
+    window.dd = JSON.stringify(strFromDelta);
     // *Convert string to Delta
     const noteBody = new Delta(JSON.parse(strFromDelta));
     // console.log(noteBody);
@@ -69,14 +80,14 @@ class ExpandedNote extends Component {
     //*Set Delta
     this.editor.setContents(window.noteBody);
   };
-*/
   render() {
     return (
       <div className="editor-container">
-        <div ref={this.editorRef} className="editor">
+        <div ref={this.editorRef} className="editor z-depth-3">
           Hello Hell
         </div>
-        {/* THE BUTTONS ARE USED ONLY IN DEBUGGING 
+
+        {/* THE BUTTONS ARE USED ONLY IN DEBUGGING  */}
         <button className="btn" onClick={this.getDelta}>
           Get Delta
         </button>
@@ -87,7 +98,6 @@ class ExpandedNote extends Component {
         >
           SET Delta
         </button>
-        */}
       </div>
     );
   }

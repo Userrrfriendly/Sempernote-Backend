@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import "./authscreen.css";
 import Context from "../../context/context";
+import { logIn, signUp } from "../../helpers/graphQLrequests";
+
 class AuthScreen extends Component {
   state = {
     logIn: true,
@@ -34,15 +36,7 @@ class AuthScreen extends Component {
     //SUBMIT SIGN UP
     if (!this.state.logIn) {
       const requestBody = {
-        query: `
-          mutation {
-            createUser(userInput: {username:"${username}",email: "${email}", password: "${password}"}) {
-              _id
-              email
-              username
-            }
-          }
-        `
+        query: signUp(username, email, password)
       };
 
       fetch("http://localhost:8000/graphql", {
@@ -81,15 +75,7 @@ class AuthScreen extends Component {
     } else {
       //SUBMIT LOG IN
       const requestBody = {
-        query: `
-          query {
-            login(email: "${email}", password: "${password}") {
-              userId
-              token
-              tokenExpiration
-            }
-          }
-        `
+        query: logIn(email, password)
       };
 
       fetch("http://localhost:8000/graphql", {

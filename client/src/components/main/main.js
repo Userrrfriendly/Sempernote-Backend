@@ -7,6 +7,7 @@ import "./main.css";
 import ExpandedNote from "../editor/expandedNote";
 import NoteListItem from "./NoteListItem";
 import LoadingBlocks from "../loading/loadingBlocks";
+import NoteHeader from "../noteHeader/noteHeader";
 
 class Main extends Component {
   static contextType = Context;
@@ -24,6 +25,10 @@ class Main extends Component {
   }
 
   render() {
+    //if activeNotebook render only notes from that notebook
+    //if not render the following:
+    // const renderNotes = "test";
+
     const renderNotes = this.context.notes ? (
       this.context.notes.map(note => {
         return (
@@ -35,7 +40,6 @@ class Main extends Component {
             updated={note.updatedAt}
             body={note.body}
             id={note._id}
-            setActiveNote={this.context.setActiveNote}
             expandNote={this.expandNote.bind(this, note._id, note.notebook._id)}
           />
         );
@@ -50,27 +54,28 @@ class Main extends Component {
 
     return (
       <main className="main-section l10">
-        <div className={containerCssClass}>{renderNotes}</div>
-        <Switch>
-          {this.context.activeNote && (
-            <Redirect exact from="/main/" to="/main/editor/" />
-          )}
-          <Route
-            exact
-            path="/main/"
-            render={props => (
-              <div className="fixed-action-btn">
-                <button
-                  title="create note"
-                  aria-label="create note"
-                  className="btn-floating btn-large green"
-                >
-                  <i className="material-icons">add</i>
-                </button>
-                {/* <button className="btn-floating btn-large red">
+        <NoteHeader
+          activeNote={this.context.activeNote}
+          notebooks={this.context.notebooks}
+        />
+        {/*  */}
+        <Route
+          exact
+          path="/main/editor/"
+          render={props => (
+            <div className="fixed-action-btn">
+              <button
+                title="create note"
+                aria-label="create note"
+                className="btn-floating btn-large green"
+                onClick={this.context.createNote}
+              >
+                <i className="material-icons">add</i>
+              </button>
+              {/* <button className="btn-floating btn-large red">
                   <i className="large material-icons">mode_edit</i>
                 </button> */}
-                {/* <ul>
+              {/* <ul>
                   <li>
                     <button className="btn-floating red">
                       <i className="material-icons">insert_chart</i>
@@ -97,28 +102,75 @@ class Main extends Component {
                     </button>
                   </li>
                 </ul> */}
-              </div>
+            </div>
+          )}
+        />
+        {/*  */}
+        <div className="main-subcontainer">
+          <div className={containerCssClass}>{renderNotes}</div>
+          <Switch>
+            {this.context.activeNote && (
+              <Redirect exact from="/main/" to="/main/editor/" />
             )}
-          />
-          <Route
-            exact
-            path="/main/editor/"
-            render={props => (
-              <>
-                {this.context.activeNote && this.context.activeNotebook && (
-                  <ExpandedNote
-                    note={
-                      //this should be refactored later ->pass the note obj and let <ExpandedNote> take care of extracting the right props
-                      this.context.notes.find(
-                        note => note._id === this.context.activeNote
-                      ).body
-                    }
-                  />
-                )}
-              </>
-            )}
-          />
-        </Switch>
+            <Route
+              exact
+              path="/main/"
+              render={props => (
+                <div className="fixed-action-btn">
+                  <button
+                    title="create note"
+                    aria-label="create note"
+                    className="btn-floating btn-large green"
+                    onClick={this.context.createNote}
+                  >
+                    <i className="material-icons">add</i>
+                  </button>
+                  {/* <button className="btn-floating btn-large red">
+                  <i className="large material-icons">mode_edit</i>
+                </button> */}
+                  {/* <ul>
+                  <li>
+                    <button className="btn-floating red">
+                      <i className="material-icons">insert_chart</i>
+                    </button>
+                  </li>
+                  <li>
+                    <button className="btn-floating yellow darken-1">
+                      <i className="material-icons">format_quote</i>
+                    </button>
+                  </li>
+                  <li>
+                    <button className="btn-floating green">
+                      <i className="material-icons">publish</i>
+                    </button>
+                  </li>
+                  <li>
+                    <button className="btn-floating btn-large blue">
+                      <i className="material-icons">note_add</i>
+                    </button>
+                  </li>
+                  <li>
+                    <button className="btn-floating btn-large green">
+                      <i className="material-icons"> library_add</i>
+                    </button>
+                  </li>
+                </ul> */}
+                </div>
+              )}
+            />
+            <Route
+              exact
+              path="/main/editor/"
+              render={props => (
+                <>
+                  {this.context.activeNote && (
+                    <ExpandedNote note={this.context.activeNote} />
+                  )}
+                </>
+              )}
+            />
+          </Switch>
+        </div>
       </main>
     );
   }

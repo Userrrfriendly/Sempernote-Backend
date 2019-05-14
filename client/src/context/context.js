@@ -11,5 +11,6 @@ export default React.createContext({
   logout: () => {},
   fetchUserData: () => {},
   setActiveNote: () => {},
-  setActiveNotebook: () => {}
+  setActiveNotebook: () => {},
+  createNote: () => {}
 });

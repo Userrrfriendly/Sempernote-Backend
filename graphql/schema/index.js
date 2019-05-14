@@ -68,7 +68,6 @@ input UserInput {
 input NoteInput {
   title: String!
   body: String!
-  isTrash: Boolean!
   notebook: String!
 }
 

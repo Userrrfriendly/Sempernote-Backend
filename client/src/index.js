@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// import { HashRouter } from 'react-router-dom'; use only if you want to host it on githubpages
+//import { HashRouter as BrowserRouter } from "react-router-dom"; //use only if you want to host it on githubpages
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";

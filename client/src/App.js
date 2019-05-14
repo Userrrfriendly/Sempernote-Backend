@@ -11,6 +11,7 @@ import AuthScreen from "./components/authScreen/authscreen";
 import Context from "./context/context";
 
 import { mergeNotes } from "./helpers/helpers";
+import { fetchUserData, createNote } from "./helpers/graphQLrequests";
 class App extends Component {
   state = {
     token: false,
@@ -23,6 +24,7 @@ class App extends Component {
   };
 
   componentDidMount() {
+    // console.log(fetchUserData);
     window.M = M;
     window.M.AutoInit();
     // M.AutoInit(); original code was this oneliner
@@ -37,8 +39,9 @@ class App extends Component {
   };
 
   setActiveNote = noteId => {
+    const activeNote = this.state.notes.find(note => note._id === noteId);
     this.setState({
-      activeNote: noteId ? noteId : null
+      activeNote: activeNote ? activeNote : null
     });
   };
 
@@ -48,29 +51,36 @@ class App extends Component {
     });
   };
 
+  createNote = note => {
+    console.log("creating note");
+    const title = "Shopping List";
+    const body = window.dd; //JSON.stringify(JSON.strignigy(delta))
+    const notebook = this.state.activeNotebook;
+    const requestBody = {
+      query: createNote(title, body, notebook)
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        // console.log(res.json());
+        return res.json();
+      })
+      .then(r => console.log(r.data));
+  };
+
   fetchUserData = () => {
     let requestBody = {
-      query: `
-        query {
-          user(userId: "${this.state.userId}") {
-            username
-            notebooks {
-              _id
-              name
-              notes{
-                _id
-                title
-                body
-                createdAt
-                updatedAt
-                notebook{
-                  _id
-                  name
-                }
-              }
-            }
-          }
-        }`
+      query: fetchUserData(this.state.userId)
     };
 
     fetch("http://localhost:8000/graphql", {
@@ -108,7 +118,8 @@ class App extends Component {
             logout: this.logout,
             fetchUserData: this.fetchUserData,
             setActiveNote: this.setActiveNote,
-            setActiveNotebook: this.setActiveNotebook
+            setActiveNotebook: this.setActiveNotebook,
+            createNote: this.createNote
           }}
         >
           <Switch>

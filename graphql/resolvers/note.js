@@ -1,5 +1,7 @@
 const Note = require("../../models/note");
 const User = require("../../models/user");
+const Notebook = require("../../models/notebook");
+
 const { transformNote } = require("./merge");
 
 module.exports = {
@@ -43,13 +45,14 @@ module.exports = {
     try {
       const result = await note.save();
       createdNote = transformNote(result);
-      const creator = await User.findById(req.userId);
+      // const creator = await User.findById(req.userId);
+      const notebook = await Notebook.findById(args.noteInput.notebook);
 
-      if (!creator) {
-        throw new Error("User not found.");
+      if (!notebook) {
+        throw new Error("notebook not found!");
       }
-      creator.notes.push(note);
-      await creator.save();
+      notebook.notes.push(note);
+      await notebook.save();
       return createdNote;
     } catch (err) {
       console.log(err);

@@ -3,7 +3,7 @@ import "./loadingBullets.css";
 
 const LoadingBullets = () => {
   return (
-    <div class="lds-ellipsis">
+    <div className="lds-ellipsis">
       <div />
       <div />
       <div />
