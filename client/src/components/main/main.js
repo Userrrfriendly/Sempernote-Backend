@@ -60,10 +60,10 @@ class Main extends Component {
         />
         {/*  */}
         <Route
-          exact
-          path="/main/editor/"
+          // exact
+          path="/main/"
           render={props => (
-            <div className="fixed-action-btn">
+            <div className="fixed-action-btn action-btn-editor">
               <button
                 title="create note"
                 aria-label="create note"
@@ -73,35 +73,38 @@ class Main extends Component {
                 <i className="material-icons">add</i>
               </button>
               {/* <button className="btn-floating btn-large red">
-                  <i className="large material-icons">mode_edit</i>
-                </button> */}
-              {/* <ul>
-                  <li>
-                    <button className="btn-floating red">
-                      <i className="material-icons">insert_chart</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating yellow darken-1">
-                      <i className="material-icons">format_quote</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating green">
-                      <i className="material-icons">publish</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating btn-large blue">
-                      <i className="material-icons">note_add</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating btn-large green">
-                      <i className="material-icons"> library_add</i>
-                    </button>
-                  </li>
-                </ul> */}
+                <i className="large material-icons">mode_edit</i>
+              </button> */}
+              <ul>
+                <li>
+                  <button className="btn-floating red">
+                    <i className="material-icons">insert_chart</i>
+                  </button>
+                </li>
+                <li>
+                  <button className="btn-floating yellow darken-1">
+                    <i className="material-icons">format_quote</i>
+                  </button>
+                </li>
+                <li>
+                  <button className="btn-floating green">
+                    <i className="material-icons">publish</i>
+                  </button>
+                </li>
+                <li>
+                  <button className="btn-floating btn-large blue">
+                    <i className="material-icons">note_add</i>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="btn-floating btn-large green"
+                    title="create notebook"
+                  >
+                    <i className="material-icons"> library_add</i>
+                  </button>
+                </li>
+              </ul>
             </div>
           )}
         />
@@ -112,11 +115,11 @@ class Main extends Component {
             {this.context.activeNote && (
               <Redirect exact from="/main/" to="/main/editor/" />
             )}
-            <Route
+            {/*<Route
               exact
               path="/main/"
               render={props => (
-                <div className="fixed-action-btn">
+                <div className="fixed-action-btn main-action-btn">
                   <button
                     title="create note"
                     aria-label="create note"
@@ -125,39 +128,36 @@ class Main extends Component {
                   >
                     <i className="material-icons">add</i>
                   </button>
-                  {/* <button className="btn-floating btn-large red">
-                  <i className="large material-icons">mode_edit</i>
-                </button> */}
-                  {/* <ul>
-                  <li>
-                    <button className="btn-floating red">
-                      <i className="material-icons">insert_chart</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating yellow darken-1">
-                      <i className="material-icons">format_quote</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating green">
-                      <i className="material-icons">publish</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating btn-large blue">
-                      <i className="material-icons">note_add</i>
-                    </button>
-                  </li>
-                  <li>
-                    <button className="btn-floating btn-large green">
-                      <i className="material-icons"> library_add</i>
-                    </button>
-                  </li>
-                </ul> */}
+                  <ul>
+                    <li>
+                      <button className="btn-floating red">
+                        <i className="material-icons">insert_chart</i>
+                      </button>
+                    </li>
+                    <li>
+                      <button className="btn-floating yellow darken-1">
+                        <i className="material-icons">format_quote</i>
+                      </button>
+                    </li>
+                    <li>
+                      <button className="btn-floating green">
+                        <i className="material-icons">publish</i>
+                      </button>
+                    </li>
+                    <li>
+                      <button className="btn-floating btn-large blue">
+                        <i className="material-icons">note_add</i>
+                      </button>
+                    </li>
+                    <li>
+                      <button className="btn-floating btn-large green">
+                        <i className="material-icons"> library_add</i>
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               )}
-            />
+              />*/}
             <Route
               exact
               path="/main/editor/"

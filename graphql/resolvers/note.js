@@ -5,6 +5,7 @@ const Notebook = require("../../models/notebook");
 const { transformNote } = require("./merge");
 
 module.exports = {
+  //unsafe method doesn't need authentication and returns all notes in DB
   notes: async () => {
     try {
       const notes = await Note.find();

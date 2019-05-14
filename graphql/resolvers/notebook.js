@@ -1,39 +1,21 @@
 const Note = require("../../models/note");
 const User = require("../../models/user");
 const Notebook = require("../../models/notebook");
-const { transformNotebooks } = require("./merge");
+const { transformSingleNotebook } = require("./merge");
 
 module.exports = {
-  // notebooks: async () => {
-  //   try {
-  //     const notes = await Note.find();
-  //     return notes.map(note => {
-  //       return transformNote(note);
-  //     });
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // },
-
-  // userNotes: async args => {
-  //   try {
-  //     const notes = await Note.find({ creator: args.userId });
-  //     return notes.map(note => {
-  //       return transformNote(note);
-  //     });
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // },
-
   createNotebook: async (args, req) => {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
 
+    const creator = await User.findById(req.userId);
+    if (!creator) {
+      throw new Error("User not found.");
+    }
+
     const notebook = new Notebook({
       name: args.name,
-      // notes: [],
       creator: req.userId
     });
 
@@ -41,12 +23,7 @@ module.exports = {
 
     try {
       const result = await notebook.save();
-      createdNotebook = transformNotebooks(result);
-      const creator = await User.findById(req.userId);
-
-      if (!creator) {
-        throw new Error("User not found.");
-      }
+      createdNotebook = transformSingleNotebook(result);
       creator.notebooks.push(notebook);
       await creator.save();
       return createdNotebook;
