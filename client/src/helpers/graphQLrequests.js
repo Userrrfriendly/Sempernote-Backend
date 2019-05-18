@@ -52,3 +52,14 @@ export const createNote = (title, body, notebook) =>
     }
   }
 }`;
+
+export const createNotebook = name =>
+  `mutation {
+  createNotebook(name:"${name}"){
+    _id
+    name
+    notes{
+      _id
+    }
+  }
+}`;

@@ -147,6 +147,7 @@ class AuthScreen extends Component {
                 <div className="form-field left-align">
                   <label htmlFor="email">Email</label>
                   <input
+                    autoFocus={true}
                     onChange={this.onChange}
                     value={this.state.email}
                     type="email"

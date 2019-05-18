@@ -1,3 +1,8 @@
+html {
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.87);
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -6,4 +11,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Overrides materializecss styles on <strong> */
+strong {
+  font-weight: bold !important;
 }

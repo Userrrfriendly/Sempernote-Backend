@@ -4,6 +4,7 @@ import React from "react";
 import Logo from "../svg-icons/platypus-logo";
 import Drawer from "../drawer/drawer";
 import M from "materialize-css";
+import { Link } from "react-router-dom";
 
 /**
  * SEMPERNOTE LOGO OVERFLOWS!
@@ -46,9 +47,12 @@ class Nav extends React.Component {
                   </a>
                 </li>
                 <li>
-                  <a href="badges.html">
+                  {/* <a href="badges.html">
                     <i className="material-icons">view_module</i>
-                  </a>
+                  </a> */}
+                  <Link to="/main/">
+                    <i className="material-icons">arrow_back</i>
+                  </Link>
                 </li>
 
                 <li>

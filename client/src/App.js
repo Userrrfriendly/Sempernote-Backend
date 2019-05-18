@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import "materialize-css/dist/css/materialize.min.css";
+// import "./mat.css"; //core styles from materialize-css
 import M from "materialize-css";
 
 import "./App.css";
@@ -11,7 +12,12 @@ import AuthScreen from "./components/authScreen/authscreen";
 import Context from "./context/context";
 
 import { mergeNotes } from "./helpers/helpers";
-import { fetchUserData, createNote } from "./helpers/graphQLrequests";
+import {
+  fetchUserData,
+  createNote,
+  createNotebook
+} from "./helpers/graphQLrequests";
+
 class App extends Component {
   state = {
     token: false,
@@ -24,9 +30,9 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // console.log(fetchUserData);
-    window.M = M;
-    window.M.AutoInit();
+    // window.M = M;
+    // window.M.AutoInit();
+    M.AutoInit();
     // M.AutoInit(); original code was this oneliner
   }
 
@@ -51,7 +57,11 @@ class App extends Component {
     });
   };
 
-  createNote = note => {
+  createNote = (e, note) => {
+    // e.stopPropagation();
+    // e.nativeEvent.stopImmediatePropagation();
+    // console.log(e);
+
     console.log("creating note");
     const title = "Shopping List";
     const body = window.dd; //JSON.stringify(JSON.strignigy(delta))
@@ -76,6 +86,41 @@ class App extends Component {
         return res.json();
       })
       .then(r => console.log(r.data));
+  };
+
+  createNotebook = name => {
+    // e.stopPropagation();
+    // e.nativeEvent.stopImmediatePropagation();
+    console.log(`...createing Notebook ${name}`);
+    let requestBody = {
+      query: createNotebook(name)
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        console.log(resData.data.createNotebook);
+        const notebooks = this.state.notebooks;
+        notebooks.push(resData.data.createNotebook);
+        this.setState({
+          notebooks: notebooks
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   fetchUserData = () => {
@@ -119,7 +164,8 @@ class App extends Component {
             fetchUserData: this.fetchUserData,
             setActiveNote: this.setActiveNote,
             setActiveNotebook: this.setActiveNotebook,
-            createNote: this.createNote
+            createNote: this.createNote,
+            createNotebook: this.createNotebook
           }}
         >
           <Switch>
