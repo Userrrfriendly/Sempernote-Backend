@@ -12,3 +12,6 @@ export const mergeNotes = array =>
     //The flat() method creates a new array with all sub-array elements concatenated into it recursively & removes empty slots in arrays.
     return accumulator.flat();
   }, []);
+
+export const selectNotebook = (arrayOfNotebooks, notebookID) =>
+  arrayOfNotebooks.filter(notebook => notebook._id === notebookID);

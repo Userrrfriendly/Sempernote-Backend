@@ -49,6 +49,7 @@ export const createNote = (title, body, notebook) =>
     updatedAt
     notebook{
       _id
+      name
     }
   }
 }`;

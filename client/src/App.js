@@ -4,14 +4,15 @@ import "materialize-css/dist/css/materialize.min.css";
 // import "./mat.css"; //core styles from materialize-css
 import M from "materialize-css";
 
+import Context from "./context/context";
+
 import "./App.css";
 import Nav from "./components/header/nav";
 import Main from "./components/main/main";
 import ErrorRoute from "./components/ErrorRoute/errorRoute";
 import AuthScreen from "./components/authScreen/authscreen";
-import Context from "./context/context";
 
-import { mergeNotes } from "./helpers/helpers";
+import { mergeNotes, selectNotebook } from "./helpers/helpers";
 import {
   fetchUserData,
   createNote,
@@ -30,10 +31,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // window.M = M;
-    // window.M.AutoInit();
     M.AutoInit();
-    // M.AutoInit(); original code was this oneliner
   }
 
   login = (token, userId, tokenExpiration) => {
@@ -53,19 +51,26 @@ class App extends Component {
 
   setActiveNotebook = notebookId => {
     this.setState({
-      activeNotebook: notebookId ? notebookId : null
+      activeNotebook: notebookId
+      // activeNotebook: notebookId ? notebookId : null
     });
   };
 
-  createNote = (e, note) => {
-    // e.stopPropagation();
-    // e.nativeEvent.stopImmediatePropagation();
-    // console.log(e);
+  pushNoteToState = note => {
+    let newNotes = this.state.notes;
+    newNotes.push(note);
+    this.setState({
+      notes: newNotes
+    });
+  };
 
-    console.log("creating note");
-    const title = "Shopping List";
-    const body = window.dd; //JSON.stringify(JSON.strignigy(delta))
-    const notebook = this.state.activeNotebook;
+  pushNoteToServer = note => {
+    console.log(`pushing note: ${note.title} to server`);
+
+    const title = note.title;
+    //JSON.stringify(JSON.strignigy(delta))
+    const body = JSON.stringify(note.body);
+    const notebook = note.notebook._id;
     const requestBody = {
       query: createNote(title, body, notebook)
     };
@@ -82,15 +87,31 @@ class App extends Component {
         if (res.status !== 200 && res.status !== 201) {
           throw new Error("Failed!");
         }
-        // console.log(res.json());
         return res.json();
       })
-      .then(r => console.log(r.data));
+      .then(r => {
+        const newNotebooks = this.state.notebooks.filter(
+          notebook => notebook._id !== r.data.createNote.notebook._id
+        );
+        let updatedNotebook = selectNotebook(
+          this.state.notebooks,
+          r.data.createNote.notebook._id
+        );
+        updatedNotebook[0].notes.push(r.data.createNote);
+        newNotebooks.push(updatedNotebook[0]);
+        let updatedNotes = this.state.notes.filter(
+          note => !note.hasOwnProperty("temp")
+        );
+        updatedNotes.push(r.data.createNote);
+        this.setState({
+          notebooks: newNotebooks,
+          notes: updatedNotes,
+          activeNote: r.data.createNote //this will trigger a re-render on editor and probably break things
+        });
+      });
   };
 
   createNotebook = name => {
-    // e.stopPropagation();
-    // e.nativeEvent.stopImmediatePropagation();
     console.log(`...createing Notebook ${name}`);
     let requestBody = {
       query: createNotebook(name)
@@ -164,8 +185,9 @@ class App extends Component {
             fetchUserData: this.fetchUserData,
             setActiveNote: this.setActiveNote,
             setActiveNotebook: this.setActiveNotebook,
-            createNote: this.createNote,
-            createNotebook: this.createNotebook
+            pushNoteToServer: this.pushNoteToServer,
+            createNotebook: this.createNotebook,
+            pushNoteToState: this.pushNoteToState
           }}
         >
           <Switch>

@@ -9,20 +9,32 @@ import NoteListItem from "./NoteListItem";
 import LoadingBlocks from "../loading/loadingBlocks";
 import NoteHeader from "../noteHeader/noteHeader";
 import NotebookModal from "../createNotebookModal/notebookModal";
+import NoteModal from "../createNoteModal/noteModal";
 
 class Main extends Component {
   state = {
-    createNotebookModalIsOpen: false
+    createNotebookModalIsOpen: false,
+    createNoteIsOpen: false
   };
 
   static contextType = Context;
 
+  /**NOTEBOOK Modal */
   openCreateNotebookModal = () => {
     this.setState({ createNotebookModalIsOpen: true });
   };
 
   closeCreateNotebookModal = () => {
     this.setState({ createNotebookModalIsOpen: false });
+  };
+
+  /**NOTE Modal */
+  openCreateNoteModal = () => {
+    this.setState({ createNoteIsOpen: true });
+  };
+
+  closeCreateNoteModal = () => {
+    this.setState({ createNoteIsOpen: false });
   };
 
   expandNote = (noteId, notebookId) => {
@@ -37,6 +49,7 @@ class Main extends Component {
 
   componentDidUpdate() {
     console.log("MAIN updated");
+    // console.log(this.context.notes);
   }
 
   render() {
@@ -107,7 +120,8 @@ class Main extends Component {
                   <button
                     title="create note"
                     aria-label="create note"
-                    onClick={this.context.createNote}
+                    // onClick={this.context.createNote}
+                    onClick={this.openCreateNoteModal}
                     className="btn-floating btn-large blue"
                   >
                     <i className="material-icons">note_add</i>
@@ -117,7 +131,6 @@ class Main extends Component {
                   <button
                     className="btn-floating btn-large green btn modal-trigger"
                     title="create notebook"
-                    // href="#create-notebook"
                     onClick={this.openCreateNotebookModal}
                   >
                     <i className="material-icons">library_add</i>
@@ -127,14 +140,10 @@ class Main extends Component {
             </div>
           )}
         />
-        {/*  */}
+
         <div className="main-subcontainer">
           <div className={containerCssClass}>{renderNotes}</div>
           <Switch>
-            {/* {this.context.activeNote && (
-              <Redirect exact from="/main/" to="/main/editor/" />
-            )} */}
-
             <Route
               exact
               path="/main/editor/"
@@ -148,36 +157,29 @@ class Main extends Component {
             />
           </Switch>
         </div>
-        {/* <a
-          class="waves-effect waves-light btn modal-trigger"
-          href="#create-notebook"
-        >
-          Modal
-        </a> */}
 
-        {/* <!-- Modal Structure --> */}
-        {/* <div id="create-notebook" className="modal">
-          <div className="modal-content">
-            <h4>Modal Header</h4>
-            <p>A bunch of text</p>
-          </div>
-          <div className="modal-footer">
-            <a
-              href="#!"
-              className="modal-close waves-effect waves-green btn-flat"
-              onClick={this.context.createNotebook}
-            >
-              Agree
-            </a>
-          </div>
-        </div> */}
-        <NotebookModal
-          notebooks={this.context.notebooks}
-          createNotebook={this.context.createNotebook}
-          openModal={this.openCreateNotebookModal}
-          closeModal={this.closeCreateNotebookModal}
-          isOpen={this.state.createNotebookModalIsOpen}
-        />
+        {this.context.notebooks && (
+          <>
+            <NotebookModal
+              notebooks={this.context.notebooks}
+              createNotebook={this.context.createNotebook}
+              openModal={this.openCreateNotebookModal}
+              closeModal={this.closeCreateNotebookModal}
+              isOpen={this.state.createNotebookModalIsOpen}
+            />
+
+            <NoteModal
+              notes={this.context.notes} //will use for validation to avoid creating duplicate notes
+              notebooks={this.context.notebooks}
+              pushNoteToServer={this.context.pushNoteToServer}
+              openModal={this.openCreateNoteModal}
+              closeModal={this.closeCreateNoteModal}
+              isOpen={this.state.createNoteIsOpen}
+              pushNoteToState={this.context.pushNoteToState}
+              setActiveNote={this.context.setActiveNote}
+            />
+          </>
+        )}
       </main>
     );
   }

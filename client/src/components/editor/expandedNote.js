@@ -7,6 +7,7 @@ class ExpandedNote extends Component {
   editorRef = React.createRef();
 
   state = {
+    // body: null
     body: new Delta(JSON.parse(this.props.note.body))
   };
 
@@ -38,18 +39,27 @@ class ExpandedNote extends Component {
     });
 
     // const noteBody = new Delta(JSON.parse(this.props.note));
+    // const setBody = async () => {
+    //   // if (!this.props.note.temp) {
+    //   //   console.log("true");
+    //   //   this.setState = {
+    //   //     body: new Delta(JSON.parse(this.props.note.body))
+    //   //   };
+    //   // } else {
+    //   //   //if the note doesn't have an _id it means it was just created on the client side so set its body as an empty delta
+    //   //   this.setState = {
+    //   //     body: new Delta(
+    //   //       JSON.parse(JSON.stringify('"{"ops":[{"insert":"\\n"}]}"'))
+    //   //     )
+    //   //   };
+    //   // }
+    // };
+    // setBody().then(
+    //   // console.log(this.state.body);
+    //   this.editor.setContents(this.state.body)
+    // );
 
-    if (this.props.note._id) {
-      this.setState = {
-        body: new Delta(JSON.parse(this.props.note.body))
-      };
-    } else {
-      //if the note doesn't have an _id it means it was just created on the client side so set its body as an empty delta
-      this.setState = {
-        body: new Delta(JSON.parse('"{"ops":[{"insert":"\\n"}]}"'))
-      };
-    }
-
+    // console.log(this.state.body);
     this.editor.setContents(this.state.body);
   }
 

@@ -12,6 +12,7 @@ export default React.createContext({
   fetchUserData: () => {},
   setActiveNote: () => {},
   setActiveNotebook: () => {},
-  createNote: () => {},
-  createNotebook: () => {}
+  pushNoteToServer: () => {},
+  createNotebook: () => {},
+  pushNoteToState: () => {}
 });
