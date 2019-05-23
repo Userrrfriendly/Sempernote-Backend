@@ -6,16 +6,16 @@ const { transformNote } = require("./merge");
 
 module.exports = {
   //unsafe method doesn't need authentication and returns all notes in DB
-  notes: async () => {
-    try {
-      const notes = await Note.find();
-      return notes.map(note => {
-        return transformNote(note);
-      });
-    } catch (err) {
-      throw err;
-    }
-  },
+  // notes: async () => {
+  //   try {
+  //     const notes = await Note.find();
+  //     return notes.map(note => {
+  //       return transformNote(note);
+  //     });
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // },
 
   userNotes: async args => {
     try {
@@ -45,6 +45,7 @@ module.exports = {
 
     try {
       const result = await note.save();
+      // console.log(result.body);
       createdNote = transformNote(result);
       // const creator = await User.findById(req.userId);
       const notebook = await Notebook.findById(args.noteInput.notebook);
@@ -73,6 +74,23 @@ module.exports = {
       return transformedNote;
     } catch (err) {
       console.log("|note.js - deleteNote|" + err);
+      throw err;
+    }
+  },
+
+  updateNoteBody: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      note.body = args.body;
+      await note.save();
+      const transformedNote = transformNote(note);
+      // await Note.deleteOne({ _id: args.noteID });
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - updateNoteBody|" + err);
       throw err;
     }
   }

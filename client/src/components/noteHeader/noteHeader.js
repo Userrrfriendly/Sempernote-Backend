@@ -23,7 +23,7 @@ class NoteHeader extends React.Component {
               />
               <label htmlFor="note-title">Title:</label>
             </div>
-            {console.log(this.props.activeNote.notebook.name)}
+            {/* {console.log(this.props.activeNote.notebook.name)} */}
             <select className="browser-default">
               <option value="1" disabled>
                 Choose your option

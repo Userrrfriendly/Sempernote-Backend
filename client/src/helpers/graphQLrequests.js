@@ -54,6 +54,21 @@ export const createNote = (title, body, notebook) =>
   }
 }`;
 
+export const updateNoteBody = (ID, body) =>
+  `mutation {
+    updateNoteBody(noteID:"${ID}", body:${body}) {
+    _id
+    title
+    body
+    createdAt
+    updatedAt
+    notebook{
+      _id
+      name
+    }
+  }
+}`;
+
 export const createNotebook = name =>
   `mutation {
   createNotebook(name:"${name}"){

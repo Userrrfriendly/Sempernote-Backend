@@ -16,7 +16,8 @@ import { mergeNotes, selectNotebook } from "./helpers/helpers";
 import {
   fetchUserData,
   createNote,
-  createNotebook
+  createNotebook,
+  updateNoteBody
 } from "./helpers/graphQLrequests";
 
 class App extends Component {
@@ -111,6 +112,39 @@ class App extends Component {
       });
   };
 
+  updateNoteBody = (id, body) => {
+    const parsedBody = JSON.stringify(JSON.stringify(body));
+    // console.log(parsedBody);
+    const requestBody = {
+      query: updateNoteBody(id, parsedBody)
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + this.state.token
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(r => {
+        console.log(r);
+        const updatedNotes = this.state.notes.filter(
+          note => note._id !== r.data.updateNoteBody._id
+        );
+        updatedNotes.push(r.data.updateNoteBody);
+        this.setState({
+          notes: updatedNotes
+        });
+      });
+  };
+
   createNotebook = name => {
     console.log(`...createing Notebook ${name}`);
     let requestBody = {
@@ -187,7 +221,8 @@ class App extends Component {
             setActiveNotebook: this.setActiveNotebook,
             pushNoteToServer: this.pushNoteToServer,
             createNotebook: this.createNotebook,
-            pushNoteToState: this.pushNoteToState
+            pushNoteToState: this.pushNoteToState,
+            updateNoteBody: this.updateNoteBody
           }}
         >
           <Switch>

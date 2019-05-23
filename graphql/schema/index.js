@@ -83,6 +83,7 @@ type RootQuery {
 type RootMutation {
     createNote(noteInput: NoteInput): Note
     deleteNote(noteID: ID!): Note!
+    updateNoteBody(noteID: ID!, body:String!): Note!
     createUser(userInput: UserInput): User
     createNotebook(name: String!): Notebook!
     createEvent(eventInput: EventInput): Event

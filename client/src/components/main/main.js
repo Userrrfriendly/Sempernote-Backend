@@ -150,14 +150,17 @@ class Main extends Component {
               render={props => (
                 <>
                   {this.context.activeNote && (
-                    <ExpandedNote note={this.context.activeNote} />
+                    <ExpandedNote
+                      note={this.context.activeNote}
+                      updateNoteBody={this.context.updateNoteBody}
+                    />
                   )}
                 </>
               )}
             />
           </Switch>
         </div>
-
+        {/* whats the point of conditional rendering? ther will always be at least one notebook(hopefully) */}
         {this.context.notebooks && (
           <>
             <NotebookModal
