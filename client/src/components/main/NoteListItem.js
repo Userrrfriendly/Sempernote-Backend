@@ -30,7 +30,10 @@ const NoteListItem = props => {
       className="note-thumbnail-container z-depth-2"
     >
       <p className="note-thumb-text thumb-date">
-        {moment(props.updated).format("LLL")}
+        created at:&nbsp;{moment(props.created).format("LLL")}
+      </p>
+      <p className="note-thumb-text thumb-date">
+        udpdated at:&nbsp;{moment(props.updated).format("LLL")}
       </p>
       <h1 className="note-thumb-text thumb-title">{props.name}</h1>
       <p className="note-thumb-text thumb-body">{previewText(props.body)}</p>

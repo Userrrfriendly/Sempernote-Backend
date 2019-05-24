@@ -15,3 +15,43 @@ export const mergeNotes = array =>
 
 export const selectNotebook = (arrayOfNotebooks, notebookID) =>
   arrayOfNotebooks.filter(notebook => notebook._id === notebookID);
+
+//shortByDate accepts a key just in case it needs to update by createdAt and not updatedAt
+//also don't forget that array.short() is an In-place algorithm and it returns the shorted array
+export const sortByDateNewestFirst = (arrOfObjects, key) =>
+  arrOfObjects.sort(
+    (a, b) => new Date(b[key]).getTime() - new Date(a[key]).getTime()
+  );
+
+export const sortByDateOldestFirst = (arrOfObjects, key) =>
+  arrOfObjects.sort(
+    (a, b) => new Date(a[key]).getTime() - new Date(b[key]).getTime()
+  );
+
+export const shortByTitle = arrOfObjects =>
+  arrOfObjects.sort((a, b) => {
+    const titleA = a.title.toUpperCase();
+    const titleB = b.title.toUpperCase();
+    if (titleA < titleB) {
+      return -1;
+    }
+    if (titleA > titleB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  });
+
+export const shortByNotebookName = arrOfObjects =>
+  arrOfObjects.sort((a, b) => {
+    const nameA = a.notebook.name.toUpperCase();
+    const nameB = b.notebook.name.toUpperCase();
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // if names are equal return 0 that doesnt change the order
+    return 0;
+  });

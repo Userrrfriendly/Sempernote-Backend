@@ -62,6 +62,7 @@ class Main extends Component {
             key={note._id}
             name={note.title}
             updated={note.updatedAt}
+            created={note.createdAt}
             body={note.body}
             id={note._id}
             expandNote={this.expandNote.bind(this, note._id, note.notebook._id)}

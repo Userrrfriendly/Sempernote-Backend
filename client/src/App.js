@@ -12,7 +12,11 @@ import Main from "./components/main/main";
 import ErrorRoute from "./components/ErrorRoute/errorRoute";
 import AuthScreen from "./components/authScreen/authscreen";
 
-import { mergeNotes, selectNotebook } from "./helpers/helpers";
+import {
+  mergeNotes,
+  selectNotebook,
+  sortByDateNewestFirst
+} from "./helpers/helpers";
 import {
   fetchUserData,
   createNote,
@@ -60,6 +64,7 @@ class App extends Component {
   pushNoteToState = note => {
     let newNotes = this.state.notes;
     newNotes.push(note);
+    sortByDateNewestFirst(newNotes, "updatedAt");
     this.setState({
       notes: newNotes
     });
@@ -104,6 +109,7 @@ class App extends Component {
           note => !note.hasOwnProperty("temp")
         );
         updatedNotes.push(r.data.createNote);
+        sortByDateNewestFirst(updatedNotes, "updatedAt");
         this.setState({
           notebooks: newNotebooks,
           notes: updatedNotes,
@@ -139,6 +145,7 @@ class App extends Component {
           note => note._id !== r.data.updateNoteBody._id
         );
         updatedNotes.push(r.data.updateNoteBody);
+        sortByDateNewestFirst(updatedNotes, "updatedAt");
         this.setState({
           notes: updatedNotes
         });
@@ -200,7 +207,10 @@ class App extends Component {
         this.setState({
           userName: resData.data.user.username,
           notebooks: resData.data.user.notebooks,
-          notes: mergeNotes(resData.data.user.notebooks)
+          notes: sortByDateNewestFirst(
+            mergeNotes(resData.data.user.notebooks),
+            "updatedAt"
+          )
         });
       })
       .catch(err => {
