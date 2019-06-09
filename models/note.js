@@ -21,7 +21,12 @@ const noteSchema = new Schema(
       ref: "Notebook",
       required: true
     },
-    isTrash: {
+    favorite: {
+      type: Boolean,
+      default: false,
+      required: true
+    },
+    trash: {
       type: Boolean,
       default: false,
       required: true

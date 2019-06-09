@@ -39,8 +39,9 @@ type User {
 type Notebook {
   _id: ID!
   name: String!
-  notes:[Note!]
+  notes:[Note]!
   creator: User!
+  favorite: Boolean!
 }
 
 type Note {
@@ -51,6 +52,8 @@ type Note {
   createdAt: String!
   updatedAt: String!
   creator: User!
+  favorite: Boolean!
+  trash: Boolean!
 }
 
 type AuthData {
@@ -84,6 +87,12 @@ type RootMutation {
     createNote(noteInput: NoteInput): Note
     deleteNote(noteID: ID!): Note!
     updateNoteBody(noteID: ID!, body:String!): Note!
+    renameNote(noteID: ID!, title:String!): Note!
+    moveNote(noteID: ID!, notebookID:ID!): Note!
+    softDeleteNote(noteID: ID!): Note!
+    restoreNote(noteID: ID!): Note!
+    noteFavoriteTrue(noteID: ID!): Note!
+    noteFavoriteFalse(noteID: ID!): Note!
     createUser(userInput: UserInput): User
     createNotebook(name: String!): Notebook!
     createEvent(eventInput: EventInput): Event

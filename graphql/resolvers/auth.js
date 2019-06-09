@@ -33,6 +33,12 @@ module.exports = {
         // notes: [defaultNote._id]
         notes: []
       });
+      // create a Trash notebook (trashnotebook is used as a soft delete)
+      // const trash = new Notebook({
+      //   name: "Trash",
+      //   creator: user._id,
+      //   notes: []
+      // });
       //create a default note
       const defaultNote = new Note({
         title: "Wellcome to SemperNote!",
@@ -46,6 +52,8 @@ module.exports = {
       await defaultNotebook.notes.push(defaultNote);
       await defaultNotebook.save();
       await defaultNote.save();
+      // await trash.save();
+      // await user.notebooks.push(trash.id);
       await user.notebooks.push(defaultNotebook.id);
 
       await user.save();

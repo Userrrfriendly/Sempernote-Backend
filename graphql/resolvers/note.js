@@ -37,8 +37,8 @@ module.exports = {
       title: args.noteInput.title,
       body: args.noteInput.body,
       creator: req.userId,
-      notebook: args.noteInput.notebook,
-      isTrash: false
+      notebook: args.noteInput.notebook
+      // favorite: false
     });
 
     let createdNote;
@@ -64,6 +64,7 @@ module.exports = {
 
   deleteNote: async (args, req) => {
     //Do I need to add some logic if someone tries to delete a note that doesn't exist?
+    //No logic to delete the reference from the notebook
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
@@ -91,6 +92,114 @@ module.exports = {
       return transformedNote;
     } catch (err) {
       console.log("|note resolver - updateNoteBody|" + err);
+      throw err;
+    }
+  },
+
+  renameNote: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      note.title = args.title;
+      await note.save();
+      const transformedNote = transformNote(note);
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - renamed note|" + err);
+      throw err;
+    }
+  },
+
+  moveNote: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    // console.log(args);
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const oldNotebook = await Notebook.findById(note.notebook).populate(
+        "notebook"
+      );
+      oldNotebook.notes.pull(args.noteID);
+      await oldNotebook.save();
+      note.notebook = args.notebookID;
+      await note.save();
+      const updatedNotebook = await Notebook.findById(args.notebookID).populate(
+        "notebook"
+      );
+      updatedNotebook.notes.push(note._id);
+      await updatedNotebook.save();
+      const transformedNote = transformNote(note);
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - moveNote|" + err);
+      throw err;
+    }
+  },
+
+  // DONT FORGET TO UPDATE DELETENOTE!!! (hardDeLete)
+  softDeleteNote: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      note.trash = true;
+      await note.save();
+      const transformedNote = transformNote(note);
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - renamed note|" + err);
+      throw err;
+    }
+  },
+
+  restoreNote: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      note.trash = false;
+      await note.save();
+      const transformedNote = transformNote(note);
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - renamed note|" + err);
+      throw err;
+    }
+  },
+
+  noteFavoriteTrue: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      note.favorite = true;
+      await note.save();
+      const transformedNote = transformNote(note);
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - renamed note|" + err);
+      throw err;
+    }
+  },
+
+  noteFavoriteFalse: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      note.favorite = false;
+      await note.save();
+      const transformedNote = transformNote(note);
+      return transformedNote;
+    } catch (err) {
+      console.log("|note resolver - renamed note|" + err);
       throw err;
     }
   }

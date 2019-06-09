@@ -30,7 +30,7 @@ const userSchema = new Schema({
   favorites: [
     {
       type: Schema.Types.ObjectId,
-      ref: "Event"
+      ref: "Note"
     }
   ],
   createdEvents: [

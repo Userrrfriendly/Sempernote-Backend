@@ -12,6 +12,11 @@ const noteBookSchema = new Schema({
     required: true,
     ref: "User"
   },
+  favorite: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
   notes: [
     {
       type: Schema.Types.ObjectId,

@@ -66,7 +66,7 @@ const transformEvent = event => {
 };
 
 const transformNote = note => {
-  console.log("transformNotebooks.bind(this, note.notebook)");
+  // console.log("transformNotebooks.bind(this, note.notebook)");
 
   return {
     ...note._doc,
