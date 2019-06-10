@@ -34,6 +34,7 @@ type User {
   notes: [Note!]
   favourites:[Note!]
   createdEvents: [Event!]
+  tags: [Tag!]
 }
 
 type Notebook {
@@ -54,6 +55,15 @@ type Note {
   creator: User!
   favorite: Boolean!
   trash: Boolean!
+  tags:[Tag]!
+}
+
+type Tag {
+  _id: ID!
+  creator: User!
+  tagname: String!
+  notes:[Note]!
+  favorite: Boolean!
 }
 
 type AuthData {
@@ -74,6 +84,11 @@ input NoteInput {
   notebook: String!
 }
 
+input AssignTagInput {
+  tagID: String!
+  note: String!
+}
+
 type RootQuery {
     notes: [Note!]
     events: [Event!]!
@@ -81,6 +96,7 @@ type RootQuery {
     login(email: String!, password: String!): AuthData!
     userNotes(userId: ID!): [Note!]
     user(userId: ID!): User!
+    tag(tagId: ID!): Tag!
 }
 
 type RootMutation {
@@ -98,6 +114,12 @@ type RootMutation {
     createEvent(eventInput: EventInput): Event
     bookEvent(eventId: ID!): Booking!
     cancelBooking(bookingId: ID!): Event!
+    createTag(tagName:String!): Tag!
+    assignTag(assignTagInput: AssignTagInput): Tag!
+    unAssignTag(tagID: ID!, noteID: ID!): Tag!
+    deleteTag(tagID: ID!): Tag!
+    tagFavoriteTrue(tagID: ID!):Tag!
+    tagFavoriteFalse(tagID: ID!):Tag!
 }
 
 schema {

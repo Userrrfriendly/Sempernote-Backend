@@ -2,6 +2,7 @@ const Event = require("../../models/event");
 const User = require("../../models/user");
 const Note = require("../../models/note");
 const Notebook = require("../../models/notebook");
+const Tag = require("../../models/tag");
 const { dateToString } = require("../../helpers/date");
 
 const events = async eventIds => {
@@ -39,8 +40,8 @@ const singleEvent = async eventId => {
 const user = async userId => {
   try {
     const user = await User.findById(userId);
-    console.log("merge/user()...");
-    console.log(user);
+    // console.log("merge/user()...");
+    // console.log(user);
     return {
       ...user._doc,
       _id: user.id,
@@ -48,7 +49,8 @@ const user = async userId => {
       username: user._doc.username,
       createdEvents: events.bind(this, user._doc.createdEvents),
       notes: notes.bind(this, user._doc.notes),
-      notebooks: transformNotebooks.bind(this, user._doc.notebooks)
+      notebooks: transformNotebooks.bind(this, user._doc.notebooks),
+      tags: transformTags.bind(this, user._doc.tags)
     };
   } catch (err) {
     console.log("|merge.js - user()|" + err);
@@ -74,7 +76,8 @@ const transformNote = note => {
     createdAt: dateToString(note._doc.createdAt),
     updatedAt: dateToString(note._doc.updatedAt),
     creator: user.bind(this, note._doc.creator),
-    notebook: transformSingleNotebook.bind(this, note._doc.notebook)
+    notebook: transformSingleNotebook.bind(this, note._doc.notebook),
+    tags: transformTags.bind(this, note._doc.tags)
   };
 };
 
@@ -101,6 +104,30 @@ const transformSingleNotebook = async singleNotebook => {
   };
 };
 
+//This transforms a single Tag
+const tranformTag = async singleTag => {
+  const tag = await Tag.findById(singleTag);
+  // console.log("tranformTag + tag: " + tag);
+  return {
+    ...tag._doc,
+    _id: tag.id,
+    creator: user.bind(this, tag._doc.creator),
+    notes: notes.bind(this, tag._doc.notes)
+  };
+};
+
+const transformTags = async tagsIDS => {
+  const tags = await Tag.find({ _id: { $in: tagsIDS } });
+  return tags.map(tag => {
+    return {
+      ...tag._doc,
+      _id: tag.id,
+      creator: user.bind(this, tag._doc.creator),
+      notes: notes.bind(this, tag._doc.notes)
+    };
+  });
+};
+
 const transformBooking = booking => {
   return {
     ...booking._doc,
@@ -117,3 +144,5 @@ exports.transformBooking = transformBooking;
 exports.transformNote = transformNote;
 exports.transformNotebooks = transformNotebooks;
 exports.transformSingleNotebook = transformSingleNotebook;
+exports.tranformTag = tranformTag;
+exports.transformTags = transformTags;

@@ -27,6 +27,12 @@ const userSchema = new Schema({
       ref: "Note"
     }
   ],
+  tags: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Tag"
+    }
+  ],
   favorites: [
     {
       type: Schema.Types.ObjectId,

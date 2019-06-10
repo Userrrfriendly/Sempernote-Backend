@@ -30,7 +30,13 @@ const noteSchema = new Schema(
       type: Boolean,
       default: false,
       required: true
-    }
+    },
+    tags: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Tag"
+      }
+    ]
   },
   { timestamps: true }
 );
