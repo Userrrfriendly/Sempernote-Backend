@@ -56,7 +56,7 @@ module.exports = {
       const tag = await Tag.findById(args.assignTagInput.tagID);
       if (!tag) throw new Error("Tag not found.");
 
-      const note = await Note.findById(args.assignTagInput.note);
+      const note = await Note.findById(args.assignTagInput.noteID);
       if (!note) throw new Error("note note found.");
       //Any better way to do it???
       const noteIsTagged = await Tag.findById(args.assignTagInput.tagID).find({
@@ -66,8 +66,8 @@ module.exports = {
 
       tag.notes.push(note);
       await tag.save();
-      creator.tags.push(tag);
-      await creator.save();
+      // creator.tags.push(tag);
+      // await creator.save();
       note.tags.push(tag);
       await note.save();
       const result = tranformTag(tag);
@@ -98,8 +98,8 @@ module.exports = {
 
       tag.notes.pull(note);
       await tag.save();
-      creator.tags.pull(tag);
-      await creator.save();
+      // creator.tags.pull(tag);
+      // await creator.save();
       note.tags.pull(tag);
       await note.save();
       const result = tranformTag(tag);

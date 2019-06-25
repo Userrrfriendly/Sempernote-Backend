@@ -86,7 +86,7 @@ input NoteInput {
 
 input AssignTagInput {
   tagID: String!
-  note: String!
+  noteID: String!
 }
 
 type RootQuery {
@@ -111,6 +111,8 @@ type RootMutation {
     noteFavoriteFalse(noteID: ID!): Note!
     createUser(userInput: UserInput): User
     createNotebook(name: String!): Notebook!
+    notebookFavoriteTrue(notebookID: ID!):Notebook!
+    notebookFavoriteFalse(notebookID: ID!):Notebook!
     createEvent(eventInput: EventInput): Event
     bookEvent(eventId: ID!): Booking!
     cancelBooking(bookingId: ID!): Event!

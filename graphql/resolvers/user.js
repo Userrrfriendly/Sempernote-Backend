@@ -1,6 +1,6 @@
 const User = require("../../models/user");
 
-const { transformNotebooks } = require("./merge");
+const { transformNotebooks, transformTags } = require("./merge");
 // const { transformNotebooks, transformNote, events, notes } = require("./merge");
 
 module.exports = {
@@ -12,7 +12,8 @@ module.exports = {
       email: user.email,
       // notes: notes.bind(this, user._doc.notes),
       password: null,
-      notebooks: transformNotebooks.bind(this, user._doc.notebooks)
+      notebooks: transformNotebooks.bind(this, user._doc.notebooks),
+      tags: transformTags.bind(this, user._doc.tags)
     };
   }
 };

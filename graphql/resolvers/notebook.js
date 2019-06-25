@@ -31,6 +31,44 @@ module.exports = {
       console.log(err);
       throw err;
     }
+  },
+
+  notebookFavoriteTrue: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+
+    try {
+      const notebook = await Notebook.findById(args.notebookID); //wtf is populate doing?
+      console.log("notebook: ");
+      console.log(notebook);
+      notebook.favorite = true;
+      await notebook.save();
+      const transformedNotebook = transformSingleNotebook(notebook);
+      return transformedNotebook;
+    } catch (err) {
+      console.log("|notebook - NotebookFavoriteTrue: |" + err);
+      throw err;
+    }
+  },
+
+  notebookFavoriteFalse: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+
+    try {
+      const notebook = await Notebook.findById(args.notebookID); //wtf is populate doing?
+      console.log("notebook: ");
+      console.log(notebook);
+      notebook.favorite = false;
+      await notebook.save();
+      const transformedNotebook = transformSingleNotebook(notebook);
+      return transformedNotebook;
+    } catch (err) {
+      console.log("|notebook - NotebookFavoriteTrue: |" + err);
+      throw err;
+    }
   }
 
   // deleteNote: async (args, req) => {

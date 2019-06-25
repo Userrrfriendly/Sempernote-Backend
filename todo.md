@@ -6,6 +6,7 @@
 - create Proper Documentation
 - Highlight NoteList that is expanded
 - Notification Toasts
+- transformTag is mistyped... tranformTag or smth
 
 ##Backend:
 - Password Length and Validation.... maybe this should be handled at front end?
