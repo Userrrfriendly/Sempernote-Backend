@@ -6,8 +6,7 @@ const Notebook = require("../../models/notebook");
 const Note = require("../../models/note");
 
 const { transformNotebooks } = require("./merge");
-//test
-const { userFromMerge } = require("./merge");
+// const { userFromMerge } = require("./merge");
 
 module.exports = {
   createUser: async args => {
@@ -30,15 +29,9 @@ module.exports = {
       const defaultNotebook = new Notebook({
         name: user.username + "'s Notebook",
         creator: user._id,
-        // notes: [defaultNote._id]
         notes: []
       });
-      // create a Trash notebook (trashnotebook is used as a soft delete)
-      // const trash = new Notebook({
-      //   name: "Trash",
-      //   creator: user._id,
-      //   notes: []
-      // });
+
       //create a default note
       const defaultNote = new Note({
         title: "Wellcome to SemperNote!",
@@ -52,10 +45,8 @@ module.exports = {
       await defaultNotebook.notes.push(defaultNote);
       await defaultNotebook.save();
       await defaultNote.save();
-      // await trash.save();
-      // await user.notebooks.push(trash.id);
       await user.notebooks.push(defaultNotebook.id);
-
+      user.defaultNotebook = defaultNotebook.id;
       await user.save();
 
       const result = transformNotebooks(user.notebooks);
@@ -89,11 +80,4 @@ module.exports = {
     );
     return { userId: user.id, token: token, tokenExpiration: 1 };
   }
-
-  // user: userFromMerge
-  // user: async args => {
-  //   const user = await User.findById(args.userId);
-  //   console.log(user);
-  //   return { ...user._doc, _id: user.id, email: user.email, notes: user.notes };
-  // }
 };

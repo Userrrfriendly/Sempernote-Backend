@@ -39,7 +39,7 @@ module.exports = {
     }
 
     try {
-      const notebook = await Notebook.findById(args.notebookID); //wtf is populate doing?
+      const notebook = await Notebook.findById(args.notebookID);
       console.log("notebook: ");
       console.log(notebook);
       notebook.favorite = true;
@@ -58,10 +58,29 @@ module.exports = {
     }
 
     try {
-      const notebook = await Notebook.findById(args.notebookID); //wtf is populate doing?
+      const notebook = await Notebook.findById(args.notebookID);
       console.log("notebook: ");
       console.log(notebook);
       notebook.favorite = false;
+      await notebook.save();
+      const transformedNotebook = transformSingleNotebook(notebook);
+      return transformedNotebook;
+    } catch (err) {
+      console.log("|notebook - NotebookFavoriteTrue: |" + err);
+      throw err;
+    }
+  },
+
+  notebookRename: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+
+    try {
+      const notebook = await Notebook.findById(args.notebookID);
+      console.log("notebook: ");
+      console.log(notebook);
+      notebook.name = args.name;
       await notebook.save();
       const transformedNotebook = transformSingleNotebook(notebook);
       return transformedNotebook;

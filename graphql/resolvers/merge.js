@@ -1,20 +1,8 @@
-const Event = require("../../models/event");
 const User = require("../../models/user");
 const Note = require("../../models/note");
 const Notebook = require("../../models/notebook");
 const Tag = require("../../models/tag");
 const { dateToString } = require("../../helpers/date");
-
-const events = async eventIds => {
-  try {
-    const events = await Event.find({ _id: { $in: eventIds } });
-    return events.map(event => {
-      return transformEvent(event);
-    });
-  } catch (err) {
-    throw err;
-  }
-};
 
 const notes = async notesIds => {
   try {
@@ -23,15 +11,6 @@ const notes = async notesIds => {
     return notes.map(note => {
       return transformNote(note);
     });
-  } catch (err) {
-    throw err;
-  }
-};
-
-const singleEvent = async eventId => {
-  try {
-    const event = await Event.findById(eventId);
-    return transformEvent(event);
   } catch (err) {
     throw err;
   }
@@ -56,15 +35,6 @@ const user = async userId => {
     console.log("|merge.js - user()|" + err);
     throw err;
   }
-};
-
-const transformEvent = event => {
-  return {
-    ...event._doc,
-    _id: event.id,
-    date: dateToString(event._doc.date),
-    creator: user.bind(this, event.creator)
-  };
 };
 
 const transformNote = note => {
@@ -139,8 +109,6 @@ const transformBooking = booking => {
   };
 };
 
-exports.transformEvent = transformEvent;
-exports.transformBooking = transformBooking;
 exports.transformNote = transformNote;
 exports.transformNotebooks = transformNotebooks;
 exports.transformSingleNotebook = transformSingleNotebook;

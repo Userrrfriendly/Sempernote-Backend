@@ -21,28 +21,14 @@ const userSchema = new Schema({
       ref: "Notebook"
     }
   ],
-  notes: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Note"
-    }
-  ],
+  defaultNotebook: {
+    type: Schema.Types.ObjectId,
+    ref: "Notebook"
+  },
   tags: [
     {
       type: Schema.Types.ObjectId,
       ref: "Tag"
-    }
-  ],
-  favorites: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Note"
-    }
-  ],
-  createdEvents: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Event"
     }
   ]
 });
