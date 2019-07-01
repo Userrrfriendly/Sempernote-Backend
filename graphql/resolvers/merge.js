@@ -7,7 +7,6 @@ const { dateToString } = require("../../helpers/date");
 const notes = async notesIds => {
   try {
     const notes = await Note.find({ _id: { $in: notesIds } });
-    // console.log(notes);
     return notes.map(note => {
       return transformNote(note);
     });
@@ -19,14 +18,11 @@ const notes = async notesIds => {
 const user = async userId => {
   try {
     const user = await User.findById(userId);
-    // console.log("merge/user()...");
-    // console.log(user);
     return {
       ...user._doc,
       _id: user.id,
       password: null,
       username: user._doc.username,
-      createdEvents: events.bind(this, user._doc.createdEvents),
       notes: notes.bind(this, user._doc.notes),
       notebooks: transformNotebooks.bind(this, user._doc.notebooks),
       tags: transformTags.bind(this, user._doc.tags)
@@ -38,8 +34,6 @@ const user = async userId => {
 };
 
 const transformNote = note => {
-  // console.log("transformNotebooks.bind(this, note.notebook)");
-
   return {
     ...note._doc,
     _id: note.id,
@@ -63,7 +57,6 @@ const transformNotebooks = async notebooksIDS => {
   });
 };
 
-//This transforms a single noteBOOK keep for now just for back up
 const transformSingleNotebook = async singleNotebook => {
   const notebook = await Notebook.findById(singleNotebook);
   return {
@@ -77,7 +70,6 @@ const transformSingleNotebook = async singleNotebook => {
 //This transforms a single Tag
 const tranformTag = async singleTag => {
   const tag = await Tag.findById(singleTag);
-  // console.log("tranformTag + tag: " + tag);
   return {
     ...tag._doc,
     _id: tag.id,

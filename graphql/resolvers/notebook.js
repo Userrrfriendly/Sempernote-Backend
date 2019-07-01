@@ -88,21 +88,45 @@ module.exports = {
       console.log("|notebook - NotebookFavoriteTrue: |" + err);
       throw err;
     }
-  }
+  },
 
-  // deleteNote: async (args, req) => {
-  //   //Do I need to add some logic if someone tries to delete a note that doesn't exist?
-  //   if (!req.isAuth) {
-  //     throw new Error("Unauthenticated!");
-  //   }
-  //   try {
-  //     const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
-  //     const transformedNote = transformNote(note);
-  //     await Note.deleteOne({ _id: args.noteID });
-  //     return transformedNote;
-  //   } catch (err) {
-  //     console.log("|note.js - deleteNote|" + err);
-  //     throw err;
-  //   }
-  // }
+  notebookDelete: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
+    try {
+      const notebook = await Notebook.findById(args.notebookID);
+      const user = await User.findById(req.userId);
+
+      const transformedNotebook = transformSingleNotebook(notebook);
+      let notes = [];
+      if (args.notebookID == user.defaultNotebook) {
+        throw new Error("Cannot Delete Default Notebook!");
+      }
+
+      if (notebook.notes.length > 0) {
+        await notebook.notes.forEach(note => {
+          //looping an array of note IDS
+          notes.push(note);
+        });
+        await Note.updateMany(
+          { _id: { $in: notes } },
+          { trash: true, notebook: user.defaultNotebook }
+        );
+        await Notebook.deleteOne({ _id: args.notebookID });
+        await Notebook.findByIdAndUpdate(user.defaultNotebook, {
+          $push: { notes: notes }
+        });
+        await User.deleteOne({ notebook: args.notebookID });
+      } else {
+        await Notebook.deleteOne({ _id: args.notebookID });
+        await User.deleteOne({ notebook: args.notebookID });
+        console.log("DELETING EMPTY NOTEBOOK");
+      }
+      return transformedNotebook;
+    } catch (err) {
+      console.log("|note.js - deleteNote|" + err);
+      throw err;
+    }
+  }
 };

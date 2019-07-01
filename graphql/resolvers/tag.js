@@ -155,7 +155,7 @@ module.exports = {
     }
 
     try {
-      const tag = await Tag.findById(args.tagID); //wtf is populate doing?
+      const tag = await Tag.findById(args.tagID);
       console.log("tag: ");
       console.log(tag);
       tag.favorite = true;
@@ -175,7 +175,7 @@ module.exports = {
     }
 
     try {
-      const tag = await Tag.findById(args.tagID); //wtf is populate doing?
+      const tag = await Tag.findById(args.tagID);
       tag.favorite = false;
       await tag.save();
       const transformedTag = tranformTag(tag);

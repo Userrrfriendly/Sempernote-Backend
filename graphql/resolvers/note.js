@@ -63,13 +63,11 @@ module.exports = {
   },
 
   deleteNote: async (args, req) => {
-    //Do I need to add some logic if someone tries to delete a note that doesn't exist?
-    //No logic to delete the reference from the notebook
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       const transformedNote = transformNote(note);
       await Note.deleteOne({ _id: args.noteID });
       return transformedNote;
@@ -84,11 +82,10 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       note.body = args.body;
       await note.save();
       const transformedNote = transformNote(note);
-      // await Note.deleteOne({ _id: args.noteID });
       return transformedNote;
     } catch (err) {
       console.log("|note resolver - updateNoteBody|" + err);
@@ -101,7 +98,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       note.title = args.title;
       await note.save();
       const transformedNote = transformNote(note);
@@ -118,17 +115,13 @@ module.exports = {
     }
     // console.log(args);
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
-      const oldNotebook = await Notebook.findById(note.notebook).populate(
-        "notebook"
-      );
+      const note = await Note.findById(args.noteID);
+      const oldNotebook = await Notebook.findById(note.notebook);
       oldNotebook.notes.pull(args.noteID);
       await oldNotebook.save();
       note.notebook = args.notebookID;
       await note.save();
-      const updatedNotebook = await Notebook.findById(args.notebookID).populate(
-        "notebook"
-      );
+      const updatedNotebook = await Notebook.findById(args.notebookID);
       updatedNotebook.notes.push(note._id);
       await updatedNotebook.save();
       const transformedNote = transformNote(note);
@@ -145,7 +138,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       note.trash = true;
       await note.save();
       const transformedNote = transformNote(note);
@@ -161,7 +154,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       note.trash = false;
       await note.save();
       const transformedNote = transformNote(note);
@@ -177,7 +170,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       note.favorite = true;
       await note.save();
       const transformedNote = transformNote(note);
@@ -193,7 +186,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID).populate("note"); //wtf is populate doing?
+      const note = await Note.findById(args.noteID); //.populate("note");
       note.favorite = false;
       await note.save();
       const transformedNote = transformNote(note);

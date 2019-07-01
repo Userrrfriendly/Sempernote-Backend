@@ -87,6 +87,7 @@ type RootMutation {
     notebookFavoriteTrue(notebookID: ID!):Notebook!
     notebookFavoriteFalse(notebookID: ID!):Notebook!
     notebookRename(notebookID: ID!, name: String!):Notebook!
+    notebookDelete(notebookID:ID!): Notebook!
     createTag(tagName:String!): Tag!
     assignTag(assignTagInput: AssignTagInput): Tag!
     unAssignTag(tagID: ID!, noteID: ID!): Tag!
