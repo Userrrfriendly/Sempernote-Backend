@@ -62,12 +62,15 @@ module.exports = {
     }
   },
 
-  deleteNote: async (args, req) => {
+  deleteNoteForever: async (args, req) => {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
+      if (!note.trash) {
+        throw new Error("Note is not TRASH! aborting delete");
+      }
       const transformedNote = transformNote(note);
       await Note.deleteOne({ _id: args.noteID });
       return transformedNote;

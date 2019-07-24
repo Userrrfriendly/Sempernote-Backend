@@ -74,7 +74,7 @@ type RootQuery {
 
 type RootMutation {
     createNote(noteInput: NoteInput): Note
-    deleteNote(noteID: ID!): Note!
+    deleteNoteForever(noteID: ID!): Note!
     updateNoteBody(noteID: ID!, body:String!): Note!
     renameNote(noteID: ID!, title:String!): Note!
     moveNote(noteID: ID!, notebookID:ID!): Note!
@@ -94,6 +94,7 @@ type RootMutation {
     deleteTag(tagID: ID!): Tag!
     tagFavoriteTrue(tagID: ID!):Tag!
     tagFavoriteFalse(tagID: ID!):Tag!
+    renameTag(tagID:ID!,newTagName:String!):Tag!
 }
 
 schema {

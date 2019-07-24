@@ -4,7 +4,7 @@ const Note = require("../../models/note");
 
 // const { transformNotebooks } = require("./merge");
 // const { transformNotebooks, transformNote, events, notes } = require("./merge");
-const { tranformTag } = require("./merge");
+const { transformTag } = require("./merge");
 
 module.exports = {
   tag: async args => {
@@ -35,7 +35,7 @@ module.exports = {
 
     try {
       const result = await tag.save();
-      createdTag = tranformTag(result);
+      createdTag = transformTag(result);
       creator.tags.push(tag);
       await creator.save();
       return createdTag;
@@ -70,7 +70,7 @@ module.exports = {
       // await creator.save();
       note.tags.push(tag);
       await note.save();
-      const result = tranformTag(tag);
+      const result = transformTag(tag);
       return result;
     } catch (err) {
       console.log("|assignTag|" + err);
@@ -102,7 +102,7 @@ module.exports = {
       // await creator.save();
       note.tags.pull(tag);
       await note.save();
-      const result = tranformTag(tag);
+      const result = transformTag(tag);
       return result;
     } catch (err) {
       console.log("|unAssignTag|" + err);
@@ -121,7 +121,7 @@ module.exports = {
       const tag = await Tag.findById(args.tagID);
       if (!tag) throw new Error("Tag not found.");
 
-      const result = tranformTag(tag);
+      const result = transformTag(tag);
 
       await Note.updateMany(
         {
@@ -140,7 +140,6 @@ module.exports = {
       creator.tags.pull(tag._id);
       await creator.save();
       await Tag.deleteOne({ _id: args.tagID });
-      //should I return something else other than the Deleted Tag?
       return result;
     } catch (err) {
       console.log("|deleteTag|" + err);
@@ -160,10 +159,10 @@ module.exports = {
       console.log(tag);
       tag.favorite = true;
       await tag.save();
-      const transformedTag = tranformTag(tag);
+      const transformedTag = transformTag(tag);
       return transformedTag;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("|tag resolver - tagFavoriteTrue|" + err);
       throw err;
     }
   },
@@ -178,10 +177,32 @@ module.exports = {
       const tag = await Tag.findById(args.tagID);
       tag.favorite = false;
       await tag.save();
-      const transformedTag = tranformTag(tag);
+      const transformedTag = transformTag(tag);
       return transformedTag;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("|Tag resolver - tagFavoriteFalse|" + err);
+      throw err;
+    }
+  },
+
+  //Rename Tag
+  renameTag: async (args, req) => {
+    try {
+      if (!req.isAuth) throw new Error("Unauthenticated!");
+
+      const creator = await User.findById(req.userId);
+      if (!creator) throw new Error("User not found.");
+
+      const tag = await Tag.findById(args.tagID);
+      if (!tag) throw new Error("Tag not found.");
+
+      tag.tagname = args.newTagName;
+      await tag.save();
+
+      const result = transformTag(tag);
+      return result;
+    } catch (err) {
+      console.log("|assignTag|" + err);
       throw err;
     }
   }

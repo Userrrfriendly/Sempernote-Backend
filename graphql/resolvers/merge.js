@@ -68,7 +68,7 @@ const transformSingleNotebook = async singleNotebook => {
 };
 
 //This transforms a single Tag
-const tranformTag = async singleTag => {
+const transformTag = async singleTag => {
   const tag = await Tag.findById(singleTag);
   return {
     ...tag._doc,
@@ -104,5 +104,5 @@ const transformBooking = booking => {
 exports.transformNote = transformNote;
 exports.transformNotebooks = transformNotebooks;
 exports.transformSingleNotebook = transformSingleNotebook;
-exports.tranformTag = tranformTag;
+exports.transformTag = transformTag;
 exports.transformTags = transformTags;

@@ -4,7 +4,10 @@ const { transformNotebooks, transformTags } = require("./merge");
 // const { transformNotebooks, transformNote, events, notes } = require("./merge");
 
 module.exports = {
-  user: async args => {
+  user: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error("Unauthenticated!");
+    }
     const user = await User.findById(args.userId);
     return {
       ...user._doc,
