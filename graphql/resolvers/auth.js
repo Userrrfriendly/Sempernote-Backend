@@ -6,7 +6,6 @@ const Notebook = require("../../models/notebook");
 const Note = require("../../models/note");
 
 const { transformNotebooks } = require("./merge");
-// const { userFromMerge } = require("./merge");
 
 module.exports = {
   createUser: async args => {

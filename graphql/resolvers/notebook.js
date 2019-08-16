@@ -40,14 +40,12 @@ module.exports = {
 
     try {
       const notebook = await Notebook.findById(args.notebookID);
-      console.log("notebook: ");
-      console.log(notebook);
       notebook.favorite = true;
       await notebook.save();
       const transformedNotebook = transformSingleNotebook(notebook);
       return transformedNotebook;
     } catch (err) {
-      console.log("|notebook - NotebookFavoriteTrue: |" + err);
+      console.log("| NotebookFavoriteTrue: |" + err);
       throw err;
     }
   },
@@ -59,14 +57,12 @@ module.exports = {
 
     try {
       const notebook = await Notebook.findById(args.notebookID);
-      console.log("notebook: ");
-      console.log(notebook);
       notebook.favorite = false;
       await notebook.save();
       const transformedNotebook = transformSingleNotebook(notebook);
       return transformedNotebook;
     } catch (err) {
-      console.log("|notebook - NotebookFavoriteTrue: |" + err);
+      console.log("|notebookFavoriteFalse: |" + err);
       throw err;
     }
   },
@@ -78,14 +74,12 @@ module.exports = {
 
     try {
       const notebook = await Notebook.findById(args.notebookID);
-      console.log("notebook: ");
-      console.log(notebook);
       notebook.name = args.name;
       await notebook.save();
       const transformedNotebook = transformSingleNotebook(notebook);
       return transformedNotebook;
     } catch (err) {
-      console.log("|notebook - NotebookFavoriteTrue: |" + err);
+      console.log("|notebookRename: |" + err);
       throw err;
     }
   },
@@ -121,11 +115,10 @@ module.exports = {
       } else {
         await Notebook.deleteOne({ _id: args.notebookID });
         await User.deleteOne({ notebook: args.notebookID });
-        console.log("DELETING EMPTY NOTEBOOK");
       }
       return transformedNotebook;
     } catch (err) {
-      console.log("|note.js - deleteNote|" + err);
+      console.log("|notebookDelete|" + err);
       throw err;
     }
   }

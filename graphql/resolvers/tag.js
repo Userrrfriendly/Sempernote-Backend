@@ -155,14 +155,12 @@ module.exports = {
 
     try {
       const tag = await Tag.findById(args.tagID);
-      console.log("tag: ");
-      console.log(tag);
       tag.favorite = true;
       await tag.save();
       const transformedTag = transformTag(tag);
       return transformedTag;
     } catch (err) {
-      console.log("|tag resolver - tagFavoriteTrue|" + err);
+      console.log("|tagFavoriteTrue|" + err);
       throw err;
     }
   },
@@ -180,7 +178,7 @@ module.exports = {
       const transformedTag = transformTag(tag);
       return transformedTag;
     } catch (err) {
-      console.log("|Tag resolver - tagFavoriteFalse|" + err);
+      console.log("|tagFavoriteFalse|" + err);
       throw err;
     }
   },
@@ -202,7 +200,7 @@ module.exports = {
       const result = transformTag(tag);
       return result;
     } catch (err) {
-      console.log("|assignTag|" + err);
+      console.log("|renameTag|" + err);
       throw err;
     }
   }

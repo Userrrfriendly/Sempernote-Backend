@@ -45,7 +45,6 @@ module.exports = {
 
     try {
       const result = await note.save();
-      // console.log(result.body);
       createdNote = transformNote(result);
       // const creator = await User.findById(req.userId);
       const notebook = await Notebook.findById(args.noteInput.notebook);
@@ -75,7 +74,7 @@ module.exports = {
       await Note.deleteOne({ _id: args.noteID });
       return transformedNote;
     } catch (err) {
-      console.log("|note.js - deleteNote|" + err);
+      console.log("|deleteNote|" + err);
       throw err;
     }
   },
@@ -91,7 +90,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - updateNoteBody|" + err);
+      console.log("|updateNoteBody|" + err);
       throw err;
     }
   },
@@ -107,7 +106,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("|renamed note|" + err);
       throw err;
     }
   },
@@ -116,7 +115,6 @@ module.exports = {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
-    // console.log(args);
     try {
       const note = await Note.findById(args.noteID);
       const oldNotebook = await Notebook.findById(note.notebook);
@@ -130,7 +128,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - moveNote|" + err);
+      console.log("|moveNote|" + err);
       throw err;
     }
   },
@@ -147,7 +145,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("|renamed note|" + err);
       throw err;
     }
   },
@@ -163,7 +161,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("|renamed note|" + err);
       throw err;
     }
   },
@@ -179,7 +177,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("|renamed note|" + err);
       throw err;
     }
   },
@@ -195,7 +193,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|note resolver - renamed note|" + err);
+      console.log("| renamed note|" + err);
       throw err;
     }
   }

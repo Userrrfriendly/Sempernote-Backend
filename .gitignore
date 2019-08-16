@@ -1,8 +1,7 @@
 node_modules
-/client
-/client/node_modules
-/client/.git
 /internal
 nodemon.json
 .vscode
 .DS_Store
+npm-debug.log
+/*.env
