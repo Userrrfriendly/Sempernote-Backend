@@ -145,7 +145,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|renamed note|" + err);
+      console.log("|softDeleteNote|" + err);
       throw err;
     }
   },
@@ -161,7 +161,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|renamed note|" + err);
+      console.log("|restoreNote|" + err);
       throw err;
     }
   },
@@ -177,7 +177,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("|renamed note|" + err);
+      console.log("|noteFavoriteTrue|" + err);
       throw err;
     }
   },
@@ -193,7 +193,7 @@ module.exports = {
       const transformedNote = transformNote(note);
       return transformedNote;
     } catch (err) {
-      console.log("| renamed note|" + err);
+      console.log("|noteFavoriteFalse|" + err);
       throw err;
     }
   }
