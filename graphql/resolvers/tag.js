@@ -2,8 +2,6 @@ const Tag = require("../../models/tag");
 const User = require("../../models/user");
 const Note = require("../../models/note");
 
-// const { transformNotebooks } = require("./merge");
-// const { transformNotebooks, transformNote, events, notes } = require("./merge");
 const { transformTag } = require("./merge");
 
 module.exports = {
@@ -16,7 +14,6 @@ module.exports = {
       favorite: tag.favorite,
       creator: tag.creator,
       notes: tag.notes
-      // notebooks: transformNotebooks.bind(this, user._doc.notebooks)
     };
   },
 
@@ -66,8 +63,6 @@ module.exports = {
 
       tag.notes.push(note);
       await tag.save();
-      // creator.tags.push(tag);
-      // await creator.save();
       note.tags.push(tag);
       await note.save();
       const result = transformTag(tag);
@@ -98,8 +93,6 @@ module.exports = {
 
       tag.notes.pull(note);
       await tag.save();
-      // creator.tags.pull(tag);
-      // await creator.save();
       note.tags.pull(tag);
       await note.save();
       const result = transformTag(tag);

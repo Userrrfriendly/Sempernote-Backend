@@ -1,11 +1,11 @@
 const Note = require("../../models/note");
-const User = require("../../models/user");
+// const User = require("../../models/user");
 const Notebook = require("../../models/notebook");
 
 const { transformNote } = require("./merge");
 
 module.exports = {
-  //unsafe method doesn't need authentication and returns all notes in DB
+  //unsafe dev-method doesn't need authentication and returns all notes in DB
   // notes: async () => {
   //   try {
   //     const notes = await Note.find();
@@ -38,7 +38,6 @@ module.exports = {
       body: args.noteInput.body,
       creator: req.userId,
       notebook: args.noteInput.notebook
-      // favorite: false
     });
 
     let createdNote;
@@ -84,7 +83,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
       note.body = args.body;
       await note.save();
       const transformedNote = transformNote(note);
@@ -100,7 +99,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
       note.title = args.title;
       await note.save();
       const transformedNote = transformNote(note);
@@ -133,13 +132,12 @@ module.exports = {
     }
   },
 
-  // DONT FORGET TO UPDATE DELETENOTE!!! (hardDeLete)
   softDeleteNote: async (args, req) => {
     if (!req.isAuth) {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
       note.trash = true;
       await note.save();
       const transformedNote = transformNote(note);
@@ -155,7 +153,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
       note.trash = false;
       await note.save();
       const transformedNote = transformNote(note);
@@ -171,7 +169,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
       note.favorite = true;
       await note.save();
       const transformedNote = transformNote(note);
@@ -187,7 +185,7 @@ module.exports = {
       throw new Error("Unauthenticated!");
     }
     try {
-      const note = await Note.findById(args.noteID); //.populate("note");
+      const note = await Note.findById(args.noteID);
       note.favorite = false;
       await note.save();
       const transformedNote = transformNote(note);

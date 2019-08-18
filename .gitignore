@@ -1,6 +1,6 @@
 node_modules
 /internal
-nodemon.json
+nodemon_dev.json
 .vscode
 .DS_Store
 npm-debug.log

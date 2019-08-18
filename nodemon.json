@@ -1,0 +1,8 @@
+{
+  "env": {
+    "MONGO_USER": "<your mongodb username goes here>",
+    "MONGO_PASSWORD": "<your mongodb password goes here>",
+    "MONGO_DB": "<mongoDB collection name goes here>",
+    "JWT_PASSWORD": "<JSON web token password goes here>"
+  }
+}
