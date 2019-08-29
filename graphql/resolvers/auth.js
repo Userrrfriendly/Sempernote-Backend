@@ -6,6 +6,7 @@ const Notebook = require("../../models/notebook");
 const Note = require("../../models/note");
 
 const { transformNotebooks } = require("./merge");
+const { defaultNoteText } = require("../../helpers/defaultNote");
 
 module.exports = {
   createUser: async args => {
@@ -30,13 +31,14 @@ module.exports = {
         creator: user._id,
         notes: []
       });
-
       //create a default note
       const defaultNote = new Note({
         title: "Wellcome to SemperNote!",
         body:
           // Default body is a stringified quill delta
-          '{"ops":[{"attributes":{"bold":true},"insert":"Thanks "},{"attributes":{"italic":true},"insert":"for "},{"attributes":{"underline":true},"insert":"registering"},{"insert":"! "},{"attributes":{"strike":true},"insert":"Create "},{"insert":"notes, tag them star them edit them and more!\\nlist"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"list"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"list3"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"\\n"}]}',
+          // It looks like this:
+          // '{"ops":[{"attributes":{"bold":true},"insert":"Thanks "},{"attributes":{"italic":true},"insert":"for "},{"attributes":{"underline":true},"insert":"registering"},{"insert":"! "},{"attributes":{"strike":true},"insert":"Create "},{"insert":"notes, tag them star them edit them and more!\\nlist"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"list"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"list3"},{"attributes":{"list":"bullet"},"insert":"\\n"},{"insert":"\\n"}]}',
+          defaultNoteText,
         creator: user._id,
         notebook: defaultNotebook._id
       });
